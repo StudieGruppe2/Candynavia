@@ -13,7 +13,7 @@ public class PostalCodeRepositoryMemory
     }
 
     //Henter et specifikt postnummer
-    PostalCodeArea? GetByPostalCode(string PostalCode)
+   public PostalCodeArea? GetByPostalCode(string PostalCode)
     {
         
     }
