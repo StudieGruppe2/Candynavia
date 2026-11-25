@@ -4,6 +4,7 @@ namespace Backend.Repositories;
 
 public class PostalCodeRepositoryMemory
 {
+    // Listen gemmer Postnumrerne i hukommelsen i stedet for en database
     private List<PostalCodeArea> postalCodeAreas = new List<PostalCodeArea>();
     
     // Henter alle postnumre

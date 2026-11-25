@@ -8,15 +8,20 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class SalesPersonController : ControllerBase
 {
+    //Controlleren bruger interfacet i stedet for et bestemt repository
+    //Det kaldes Dependency Inversion og gør det muligt at skifte mellem Memory og MongoDB
     private readonly ISalesPersonRepository salesPersonRepository;
     private readonly IPostalCodeRepository postalCodeRepository;
 
+    //Dependency Injection gennem constructoren
     public SalesPersonController(ISalesPersonRepository salesPersonRepository, IPostalCodeRepository postalCodeRepository)
     {
+        // Gemmer referencerne, så de kan bruges i controllerens metoder
         this.salesPersonRepository = salesPersonRepository;
         this.postalCodeRepository = postalCodeRepository;
     }
 
+    /*----Hent sælger ud fra postnummer----*/
     [HttpGet("postalcode/{postalCode}")]
     public ActionResult<SalesPerson> GetByPostalCode(string postalCode)
     {
@@ -25,7 +30,7 @@ public class SalesPersonController : ControllerBase
         {
             return NotFound();
         }
-
+        
         SalesPerson? salesPerson = salesPersonRepository.GetSalesPersonById(area.SalesPerson_Id);
         if (salesPerson == null)
         {
