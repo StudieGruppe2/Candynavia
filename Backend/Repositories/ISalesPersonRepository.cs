@@ -1,6 +1,8 @@
+using Core;
+
 namespace Backend.Repositories;
 
-public class ISalesPersonRepository
+public interface ISalesPersonRepository
 {
-    
+    SalesPerson? GetSalesPersonById(int salesPersonId);
 }
