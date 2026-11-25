@@ -17,6 +17,6 @@ public class MeetingRequest
     public int SalesPerson_Id {get; set;}
 
 
-    public Customer Costumer {get; set;} = new();
+    public Customer Customer {get; set;} = new();
 
 }

@@ -8,7 +8,7 @@ public class Customer
 
     public string Phone {get; set;} = "";
 
-    public string Comapny {get; set;} = "";
+    public string Company {get; set;} = "";
 
     public string Position {get; set;} = "";
 

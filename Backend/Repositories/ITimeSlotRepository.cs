@@ -11,7 +11,7 @@ public interface ITimeSlotRepository
     TimeSlot? GetTimeSlotById(int TimeSlot_Id);
     List<TimeSlot> GetAvailableTimeSlots(int SalesPerson_Id);
     List<TimeSlot> GetTimeSlotsBySalesPersonId(int SalesPerson_Id);
-    Bool ReserveTimeSlot(int TimeSlot_Id, string status);
+    bool ReserveTimeSlot(int TimeSlot_Id, string status);
 
     //Mangler DateTime fra core klassen
     

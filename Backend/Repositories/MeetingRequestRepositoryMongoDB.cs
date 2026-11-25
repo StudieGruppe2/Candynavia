@@ -31,14 +31,39 @@ public class MeetingRequestRepositoryMongoDB : IMeetingRequestRepository
     } 
      
     /*----Hent request udfra id----*/
-   public MeetingRequest? GetById(int meetingRequestId)
+   public MeetingRequest? GetById(int meetingRequest_Id)
     {
+         FilterDefinition<MeetingRequest> filter = 
+             Builders<MeetingRequest>.Filter.Eq("MeetingRequest_Id", meetingRequest_Id);
          
+         return meetingRequestCollection.Find(filter).FirstOrDefault();
     }
      
     /*----Opret ny meetingrequest----*/
     public MeetingRequest Add(MeetingRequest meetingRequest)
     {
-         
+        // Finder forespørglsen med det højeste ID
+        FilterDefinition<MeetingRequest> filter = Builders<MeetingRequest>.Filter.Empty;
+        SortDefinition<MeetingRequest> sort = Builders<MeetingRequest>.Sort.Descending(m => m.MeetingRequest_Id);
+        
+        MeetingRequest? last = meetingRequestCollection.Find(filter).Sort(sort).FirstOrDefault();
+        
+        // Hvis databasen er tom, starter ID på 1
+        if (last == null)
+        {
+            // Ellers får forespørgslen et ID, der er 1 højere end det højeste
+            meetingRequest.MeetingRequest_Id = 1;
+        }
+        else
+        {
+            // Ellers får annoncen et ID, der er 1 højere end det højeste
+            meetingRequest.MeetingRequest_Id = last.MeetingRequest_Id + 1;
+        }
+        
+        //Gemmer den nye forespørgsel i MongoDB
+        meetingRequestCollection.InsertOne(meetingRequest);
+        
+        // Returnerer den oprettede forespørgsel
+        return meetingRequest;
     }
 }
