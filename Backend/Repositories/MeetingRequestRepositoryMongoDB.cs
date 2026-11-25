@@ -31,13 +31,13 @@ public class MeetingRequestRepositoryMongoDB : IMeetingRequestRepository
     } 
      
     /*----Hent request udfra id----*/
-    MeetingRequest? GetById(int meetingRequestId)
+   public MeetingRequest? GetById(int meetingRequestId)
     {
          
     }
      
     /*----Opret ny meetingrequest----*/
-    MeetingRequest Add(MeetingRequest meetingRequest)
+    public MeetingRequest Add(MeetingRequest meetingRequest)
     {
          
     }
