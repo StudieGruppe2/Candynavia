@@ -13,6 +13,7 @@ public class MeetingRequest
     public bool Consent {get; set;} = false;
 
     public int TimeSlot_Id {get; set;}
+    
     public int SalesPerson_Id {get; set;}
 
 
