@@ -6,8 +6,8 @@ namespace Backend.Repositories;
 public interface IMeetingRequestRepository
 {
     //Henter en request udfra dens id
-    MeetingRequest? GetById(int meetingRequestId);
+    public MeetingRequest? GetById(int meetingRequestId);
     
     //Opretter en ny meetingrequest
-    MeetingRequest Add(MeetingRequest meetingRequest);
+    public MeetingRequest Add(MeetingRequest meetingRequest);
 }
