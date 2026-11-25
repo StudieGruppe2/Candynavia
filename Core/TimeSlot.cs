@@ -1,15 +1,15 @@
 namespace Core;
 
-public class Customer
+public class TimeSlot
 {
-    public string Name {get; set;} = "";
+    public int TimeSlot_Id {get; set;} 
 
-    public string Email {get; set;} = "";
+    public DateTime StartTime {get; set;}
 
-    public string Phone {get; set;} = "";
+    public DateTime EndTime {get; set;}
 
-    public string Comapny {get; set;} = "";
+    public string Status {get; set;} = "";
 
-    public string Position {get; set;} = "";
+    public int SalesPerson_Id {get; set;}
 
 }
