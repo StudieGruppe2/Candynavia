@@ -6,9 +6,9 @@ namespace Backend.Repositories;
 public interface IPostalCodeRepository
 {
     // Henter alle postnumre
-    List<PostalCodeArea> GetAllPostalCodes();
+    public List<PostalCodeArea> GetAllPostalCodes();
     
     //Henter et specifikt postnummer
-    PostalCodeArea? GetByPostalCode(string PostalCode);
+   public  PostalCodeArea? GetByPostalCode(string PostalCode);
 
 }
