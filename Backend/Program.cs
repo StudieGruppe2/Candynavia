@@ -6,9 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Gør det muligt at bruge Swagger til at teste API'et
-//builder.Services.AddSwaggerGen();
-
 // Dependency Injection: .NET får besked på, hvilket repository
 // den skal give til controllerne, når de beder om et interface
 
@@ -31,8 +28,6 @@ builder.Services.AddCors(OpsaetCors);
 
 var app = builder.Build();
 
-// Swagger aktiveres, når backend kører i Development
-
 
 // Skal stå før MapControllers
 app.UseCors();
@@ -42,9 +37,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-
-// ---------- CORS ----------
 
 // Tillader frontend at sende HTTP-requests til backend
 static void OpsaetCors(CorsOptions options)
