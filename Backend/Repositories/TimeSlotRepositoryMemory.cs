@@ -6,12 +6,6 @@ public class TimeSlotRepositoryMemory : ITimeSlotRepository
     private List<TimeSlot> timeSlots = new List<TimeSlot>();
     private readonly object reservationLock = new object();
 
-
-    public TimeSlotRepositoryMemory()
-    {
-        //Test data med add
-    }
-
     public TimeSlot? GetTimeSlotById(int TimeSlot_Id)
     {
         return timeSlots.FirstOrDefault(t => t.TimeSlot_Id == TimeSlot_Id);
