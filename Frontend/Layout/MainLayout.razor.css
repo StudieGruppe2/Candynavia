@@ -1,102 +1,50 @@
-/* ---------- Fælles farver og skrifttyper ---------- */
-
-/* Variablerne nedarves til underliggende komponenter,
-   herunder ContactPage */
-
+/* Sidens overordnede layout */
 .site-layout {
-
-    /* Primære farver */
-    --primary-color: #78162D;
-    --primary-hover: #591022;
-
-    /* Sekundære farver */
-    --secondary-color: #B76E78;
-    --accent-color: #F1DEDF;
-
-    /* Baggrundsfarver */
-    --background-color: #F7F1EB;
-    --surface-color: #FCF9F6;
-
-    /* Tekstfarver */
-    --text-color: #261B1B;
-    --text-secondary: #625959;
-
-    /* Kanter og afrunding */
-    --border-color: #E9DFD8;
-    --border-radius: 16px;
-
-    /* Skrifttyper */
-    --font-heading: Georgia, serif;
-    --font-body: Arial, sans-serif;
-
-    /* Generel styling */
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.6;
     min-height: 100vh;
+    background-color: #F7F1EB;
 }
 
-
-/* ---------- Header ---------- */
-
-/* Placerer logo og navigation vandret */
-
+/* Header med logo og navigation */
 .main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 16px 4%;
-
-    background-color: var(--surface-color);
-    border-bottom: 1px solid var(--border-color);
+    background-color: #FCF9F6;
+    border-bottom: 1px solid #E9DFD8;
 }
 
-
-/* ---------- Logo ---------- */
-
+/* Logo */
 .logo img {
     width: 210px;
     height: auto;
+    display: block;
 }
 
-
-/* ---------- Navigation ---------- */
-
+/* Navigation */
 .main-nav {
     display: flex;
     align-items: center;
     gap: 32px;
 }
 
-/* ::deep anvendes, fordi NavLink er en Blazor-komponent,
-   som genererer et HTML-link */
-
-.main-nav ::deep a {
-    color: var(--text-color);
+/* Navigationslinks */
+.main-nav a {
+    font-family: Arial, sans-serif;
     font-size: 16px;
     font-weight: 600;
+    color: #78162D;
     text-decoration: none;
     padding: 10px 4px;
 }
 
-/* Skifter farve, når musen holdes over linket */
-
-.main-nav ::deep a:hover {
-    color: var(--primary-color);
+/* Hover på navigationslinks */
+.main-nav a:hover {
+    color: #591022;
+    border-bottom: 2px solid #78162D;
 }
 
-/* Fremhæver den aktive side */
-
-.main-nav ::deep a.active {
-    color: var(--primary-color);
-    border-bottom: 2px solid var(--primary-color);
-}
-
-
-/* ---------- Sidens indhold ---------- */
-
+/* Sidens indhold */
 .main-content {
     padding: 40px 4%;
 }
