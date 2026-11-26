@@ -1,0 +1,72 @@
+[
+  {
+    "MeetingRequest_Id": 1,
+    "Description": "Interesseret i jeres efterårssortiment",
+    "Status": "Pending",
+    "CreatedAt": "2026-11-25T10:00:00",
+    "Consent": true,
+    "TimeSlot_Id": 2,
+    "SalesPerson_Id": 1,
+    "Customer": { "Name": "Anne Jensen", "Email": "anne@firma.dk", "Phone": "12345678", "Company": "Firma A/S", "Position": "Indkøber" }
+  },
+  {
+    "MeetingRequest_Id": 2,
+    "Description": "Vil gerne høre om julesortimentet til vores butikker",
+    "Status": "Accepted",
+    "CreatedAt": "2026-11-20T14:30:00",
+    "Consent": true,
+    "TimeSlot_Id": 6,
+    "SalesPerson_Id": 1,
+    "Customer": { "Name": "Lars Mikkelsen", "Email": "lars@kioskhuset.dk", "Phone": "23456789", "Company": "Kioskhuset ApS", "Position": "Indehaver" }
+  },
+  {
+    "MeetingRequest_Id": 3,
+    "Description": "Ønsker et tilbud på en større ordre til efteråret",
+    "Status": "Pending",
+    "CreatedAt": "2026-11-24T09:15:00",
+    "Consent": true,
+    "TimeSlot_Id": 7,
+    "SalesPerson_Id": 2,
+    "Customer": { "Name": "Camilla Friis", "Email": "camilla@fynsslik.dk", "Phone": "34567890", "Company": "Fyns Slik", "Position": "Butikschef" }
+  },
+  {
+    "MeetingRequest_Id": 4,
+    "Description": "Vil gerne have smagsprøver på nye produkter",
+    "Status": "Accepted",
+    "CreatedAt": "2026-11-18T11:00:00",
+    "Consent": true,
+    "TimeSlot_Id": 8,
+    "SalesPerson_Id": 2,
+    "Customer": { "Name": "Henrik Dahl", "Email": "henrik@odensekiosk.dk", "Phone": "45678901", "Company": "Odense Kiosk", "Position": "Indkøbsansvarlig" }
+  },
+  {
+    "MeetingRequest_Id": 5,
+    "Description": "Interesseret i at føre jeres vingummi i vores café",
+    "Status": "Pending",
+    "CreatedAt": "2026-11-26T08:45:00",
+    "Consent": true,
+    "TimeSlot_Id": 9,
+    "SalesPerson_Id": 3,
+    "Customer": { "Name": "Maria Thomsen", "Email": "maria@cafesoed.dk", "Phone": "56789012", "Company": "Café Sød", "Position": "Ejer" }
+  },
+  {
+    "MeetingRequest_Id": 6,
+    "Description": "Vil gerne drøfte en fast leveringsaftale",
+    "Status": "Accepted",
+    "CreatedAt": "2026-11-15T13:20:00",
+    "Consent": true,
+    "TimeSlot_Id": 10,
+    "SalesPerson_Id": 3,
+    "Customer": { "Name": "Mikkel Sørensen", "Email": "mikkel@aarhusdetail.dk", "Phone": "67890123", "Company": "Aarhus Detail A/S", "Position": "Kategorichef" }
+  },
+  {
+    "MeetingRequest_Id": 7,
+    "Description": "Spørgsmål til priser på pick & mix",
+    "Status": "Rejected",
+    "CreatedAt": "2026-11-22T16:10:00",
+    "Consent": true,
+    "TimeSlot_Id": 3,
+    "SalesPerson_Id": 1,
+    "Customer": { "Name": "Ida Krogh", "Email": "ida@roskildeslik.dk", "Phone": "78901234", "Company": "Roskilde Slikbutik", "Position": "Indehaver" }
+  }
+]
