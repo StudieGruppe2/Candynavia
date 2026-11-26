@@ -18,11 +18,13 @@ builder.Services.AddSingleton<IMeetingRequestRepository, MeetingRequestRepositor
 builder.Services.AddSingleton<ISalesPersonRepository, SalesPersonRepositoryMemory>();
 builder.Services.AddSingleton<ITimeSlotRepository, TimeSlotRepositoryMemory>();
 
+/*
 // MongoDB-repositories (bruges lige nu)
 builder.Services.AddSingleton<ISalesPersonRepository, SalesPersonRepositoryMongoDB>();
 builder.Services.AddSingleton<IPostalCodeRepository, PostalCodeRepositoryMongoDB>();
 builder.Services.AddSingleton<ITimeSlotRepository, TimeSlotRepositoryMongoDB>();
 builder.Services.AddSingleton<IMeetingRequestRepository, MeetingRequestRepositoryMongoDB>();
+*/
 
 // Giver frontend lov til at kalde backend
 builder.Services.AddCors(OpsaetCors);
