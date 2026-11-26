@@ -11,8 +11,48 @@
         og book et møde på et tidspunkt, der passer dig.
     </p>
 
+    <!--Fælles container til Danmarkskort og søgning-->
+    <div class="sales-container">
+
+        <!--Danmarkskort med salgsområderne og sælgere-->
+        <div class="map-container">
+
+            <img src="Pictures/CandynaviaDKKort.png"
+                 alt="Danmarkskort over Candynavias salgsområder"
+                 class="sales-map" />
+
+        </div>
+
+        <!--Boks til søgning efter sælger-->
+        <div class="Search-container">
+            <h2>Find din lokale sælger</h2>
+            <p>
+                Indtast dit postnummer, så finder vi den rette
+                kontaktperson til dig.
+            </p>
+            <div class="Searchline">
+                <input type="text"
+                       placeholder="Indtast postnummer"
+                       maxlength="4"
+                       @bind-value="searchText" />
+                <div>
+                    <button class="btn-primary" @onclick="Search">
+                        Find din sælger
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+
 @code {
+
+    string searchText = ""; //Hvad der skrives i søgefeltet - pr. default tom
+
+    private async Task Search()
+    {
+
+    }
 
 }

@@ -3,7 +3,8 @@
     font-family: Arial, sans-serif;
 }
 
-/* Overskrifter */
+
+/*Overskrifter*/
 h1 {
     font-family: Georgia, serif;
     font-size: 48px;
@@ -32,7 +33,8 @@ h4 {
     color: #261B1B;
 }
 
-/* Brødtekst */
+
+/*Brødtekst*/
 p {
     font-family: Arial, sans-serif;
     font-size: 16px;
@@ -48,6 +50,8 @@ p {
     margin-bottom: 8px;
 }
 
+
+/*Knapper*/
 /* Primær knap */
 .btn-primary {
     background-color: #78162D;
@@ -74,16 +78,78 @@ p {
     cursor: pointer;
 }
 
-/* Bokse til kort og sælgeroplysninger */
-.content-card {
+
+/*Kort og søgning*/
+/* Fælles container, som placerer boksene ved siden af hinanden */
+.sales-container {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+}
+
+/* Fælles styling af begge bokse */
+.map-container,
+.Search-container {
     background-color: #FCF9F6;
     border: 1px solid #E9DFD8;
     border-radius: 16px;
     padding: 24px;
+    box-shadow: 0 5px 15px rgba(66, 30, 35, 0.06);
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Boks omkring Danmarkskortet */
+.map-container {
+    flex: 3;
 }
 
 /* Danmarkskort */
 .sales-map {
     width: 100%;
     height: auto;
+    display: block;
+}
+
+/* Boks omkring søgning */
+.Search-container {
+    flex: 2;
+}
+
+/* Søgelinje */
+.Searchline {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    margin: 16px 0 24px;
+}
+
+/* Søgefelt til postnummer */
+.Searchline input {
+    width: 100%;
+    min-width: 0;
+    padding: 14px;
+    font-size: 16px;
+    border: 1px solid #E9DFD8;
+    border-radius: 12px;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+
+/*Responsivt design*/
+/* Placerer boksene under hinanden på mindre skærme */
+@media (max-width: 768px) {
+
+    .sales-container {
+        flex-direction: column;
+    }
+
+    .Searchline {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
 }
