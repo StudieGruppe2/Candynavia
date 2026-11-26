@@ -68,14 +68,14 @@ p {
 
 
 /*----Valg af dato og tidspunkt----*/
-/*---placerer datoer og tidspunkter ved siden af hinanden----*/
+/*placerer datoer og tidspunkter ved siden af hinanden*/
 .booking-container {
     display: flex;
     gap: 24px;
     margin-bottom: 24px;
 }
 
-/*----Venstre boks med ledige datoer----*/
+/*Venstre boks med ledige datoer*/
 .calendar-container {
     flex: 1;
     min-width: 0;
@@ -84,7 +84,7 @@ p {
     padding: 20px;
 }
 
-/*----Viser datoerne under hinanden----*/
+/*Viser datoerne under hinanden*/
 .date-list {
     display: flex;
     flex-direction: column;
@@ -93,7 +93,7 @@ p {
     overflow-y: auto;
 }
 
-/*----Højre boks med ledige tidspunkter----*/
+/*Højre boks med ledige tidspunkter*/
 .available-times {
     flex: 1;
     min-width: 0;
@@ -102,7 +102,7 @@ p {
 
 
 /*----Knapper til datoer og tidspunkter----*/
-/*----Fælles styling til datoer og tidspunkter----*/
+/*Fælles styling til datoer og tidspunkter*/
 .time-slot {
     display: block;
     width: 100%;
@@ -116,18 +116,18 @@ p {
     cursor: pointer;
 }
 
-/*----Lys rosa baggrund på datoknapperne----*/
+/*Lys rosa baggrund på datoknapperne*/
 .date-list .time-slot {
     background-color: #F1DEDF;
     margin-bottom: 0;
 }
 
-/*----Når musen holdes over en dato eller et tidspunkt----*/
+/*Når musen holdes over en dato eller et tidspunkt*/
 .time-slot:hover {
     background-color: #E6B6B0;
 }
 
-/*----Valgt dato eller tidspunkt----*/
+/*Valgt dato eller tidspunkt*/
 .time-slot.selected,
 .time-slot.selected:hover {
     background-color: #78162D;
@@ -135,7 +135,7 @@ p {
 }
 
 
-/*----Kundeformular----*/
+/*Kundeformular*/
 input, textarea {
     display: block;
     width: 100%;
@@ -148,7 +148,7 @@ input, textarea {
     background-color: white;
 }
 
-/*----Samtykke----*/
+/*Samtykke*/
 .consent {
     display: flex;
     gap: 8px;
@@ -163,7 +163,7 @@ input, textarea {
 }
 
 
-/*----Primær knap----*/
+/*Primær knap*/
 .btn-primary {
     background-color: #78162D;
     color: white;
@@ -178,14 +178,14 @@ input, textarea {
     background-color: #591022;
 }
 
-/*----Knapper deaktiveres under afsendelse----*/
+/*Knapper deaktiveres under afsendelse*/
 button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
 
-/*----Beskeder----*/
+/*Beskeder*/
 .message-error {
     color: #78162D;
 }
@@ -194,7 +194,7 @@ button:disabled {
 }
 
 
-/*----Responsivt design----*/
+/*Responsivt design*/
 @media (max-width: 768px) {
 
     .booking-container {

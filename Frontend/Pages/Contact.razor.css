@@ -64,6 +64,7 @@ p {
 /* Danmarkskortets boks fylder mest*/
 .map-container {
     flex: 3;
+    padding: 0px /*gør så billedet fylder mere i boksen*/
 }
 
 /*Danmarkskortet bevarer sine proportioner */
@@ -88,7 +89,7 @@ p {
     margin: 16px 0 24px;
 }
 
-/*----Søgefelt til postnummer----*/
+/*Søgefelt til postnummer*/
 .Searchline input {
     width: 100%;
     min-width: 0;
@@ -101,8 +102,7 @@ p {
 }
 
 
-/*----Søgeresultat----*/
-
+/*Søgeresultat*/
 /* Viser oplysninger om den fundne sælger */
 .salesperson-result {
     padding-top: 24px;
@@ -113,13 +113,13 @@ p {
     margin: 0;
 }
 
-/*----Fejlbesked ved ugyldig eller mislykket søgning----*/
+/*Fejlbesked ved ugyldig eller mislykket søgning*/
 .message-error {
     color: #78162D;
 }
 
 
-/*----Knapper ----*/
+/*Knapper*/
 .btn-primary {
     background-color: #78162D;
     color: white;
@@ -135,7 +135,7 @@ p {
 }
 
 
-/*-----responsivt design----*/
+/*responsivt design*/
 
 @media (max-width: 768px) {
     /* Placerer kort og søgeboks under hinanden */
