@@ -1,21 +1,17 @@
 @inherits LayoutComponentBase
 
-<div class="site-layout">
+<!-- Header -->
+<div class="header">
 
-    <header class="main-header">
+    <img class="logo" src="Pictures/CandynaviaLogo.png" alt="Candynavia" />
 
-        <a href="/" class="logo">
-            <img src="pictures/logo.png" alt="Candynavia" />
-        </a>
+    <div class="navigation">
+        <a href="/" class="nav-item">Kontakt</a>
+    </div>
 
-        <nav class="main-nav">
-            <a href="/">Kontakt</a>
-        </nav>
+</div>
 
-    </header>
-
-    <main class="main-content">
-        @Body
-    </main>
-
+<!-- Sidens indhold -->
+<div class="main-content">
+    @Body
 </div>
