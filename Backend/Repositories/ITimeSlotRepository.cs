@@ -7,10 +7,10 @@ public interface ITimeSlotRepository
 { 
     // // Henter alle time slots (ledige tider)
     // List<TimeSlot> betyder, at metoden returnerer en liste med time slots (ledige tider)
-    List<TimeSlot> GetAll();
+    // List<TimeSlot> GetAll();
     TimeSlot? GetTimeSlotById(int TimeSlot_Id);
     List<TimeSlot> GetAvailableTimeSlots(int SalesPerson_Id);
-    List<TimeSlot> GetTimeSlotsBySalesPersonId(int SalesPerson_Id);
+    // List<TimeSlot> GetTimeSlotsBySalesPersonId(int SalesPerson_Id);
     bool ReserveTimeSlot(int TimeSlot_Id, string status);
 
     //Mangler DateTime fra core klassen

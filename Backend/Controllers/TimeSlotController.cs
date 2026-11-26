@@ -19,18 +19,26 @@ public class TimeSlotController : ControllerBase
         this.timeSlotRepository = timeSlotRepository;
     }
 
+    /*
     // ---------- HENT Time slot ----------
     // GET /TimeSlot - Henter alle time slots
     [HttpGet]
     public List<TimeSlot> GetAll()
     {
-        return timeSlotRepository;
+        return timeSlotRepository.GetAll();
     }
+    */
 
-    [HttpGet("{}")]
-    public ActionResult<TimeSlot>GetAvailableTimeSlotsBySalesPerson(int SalesPerson_id)
+    // ---------- HENT LEDIGE TIME SLOTS FOR EN SÆLGER ----------
+    // GET /TimeSlot/salesperson/{SalesPerson_Id}
+    [HttpGet("salesperson/{SalesPerson_Id}")]
+    public ActionResult<List<TimeSlot>> GetAvailableTimeSlotsBySalesPerson(int SalesPerson_Id)
     {
-        
+        // Henter alle ledige tidspunkter for sælgeren
+        List<TimeSlot> timeSlots = timeSlotRepository.GetAvailableTimeSlots(SalesPerson_Id);
+
+        // Returnerer listen til frontend (den kan være tom)
+        return timeSlots;
     }
     
     

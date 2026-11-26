@@ -4,10 +4,10 @@ using MongoDB.Driver;
 
 namespace Backend.Repositories;
 
-public class PostalCodeRepositoryMongoDB
+public class PostalCodeRepositoryMongoDB : IPostalCodeRepository
 {
     //Forbindelsen til samlingen "MeetingRequest" i mongoDB
-    private readonly IMongoCollection<PostalCodeArea> postalCodeAreasCollection;
+    private readonly IMongoCollection<PostalCodeArea> postalCodeCollection;
      
     /*----Forbindelse til MongoDB----*/
     //Constructoren køres når repositoriet bliver oprettet
@@ -27,17 +27,30 @@ public class PostalCodeRepositoryMongoDB
         MongoClient client = new MongoClient(connectionString);
         IMongoDatabase database = client.GetDatabase("CandynaviaDB");
 
-        postalCodeAreasCollection = database.GetCollection<PostalCodeArea>("PostalCodeAreas");
+        postalCodeCollection = database.GetCollection<PostalCodeArea>("PostalCodeAreas");
     } 
     
     // Henter alle postnumre
     public List<PostalCodeArea> GetAllPostalCodes()
     {
-        
+        // Et tomt filter betyder, at alle postalCodes skal hentes
+        FilterDefinition<PostalCodeArea> filter = Builders<PostalCodeArea>.Filter.Empty;
+
+
+        return postalCodeCollection.Find(filter).ToList();
+
+
     }
 
     //Henter et specifikt postnummer
    public PostalCodeArea? GetByPostalCode(string PostalCode)
     {
         
+        // Finder annoncen, hvor _id svarer til Annonce_Id
+        FilterDefinition<PostalCodeArea> filter =
+            Builders<PostalCodeArea>.Filter.Eq("PostalCode", PostalCode);
+
+        // Returnerer annoncen eller null, hvis den ikke findes
+        return postalCodeCollection.Find(filter).FirstOrDefault();
+    }
     }

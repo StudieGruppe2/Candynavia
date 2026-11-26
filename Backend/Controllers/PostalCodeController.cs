@@ -23,14 +23,23 @@ public class PostalCodeController : ControllerBase
     [HttpGet]
     public ActionResult<List<PostalCodeArea>> GetAll()
     {
-        return  
+        return postalCodeRepository.GetAllPostalCodes();
     }
 
     /*----Hent bestemt postnummer----*/
     [HttpGet("{postalCode}")]
     public ActionResult<PostalCodeArea> GetByPostalCode(string PostalCode)
     {
-        return 
+        // Leder efter postalCode i repository
+        PostalCodeArea? postalCode = postalCodeRepository.GetByPostalCode(PostalCode);
+
+        // Hvis postalcode ikke findes, returneres 404 Not Found
+        if (postalCode == null)
+        {
+            return NotFound("Postal Code does not exist.");
+        }
+        // Returnerer annoncen til frontend
+        return postalCode;
     }
 
 }
