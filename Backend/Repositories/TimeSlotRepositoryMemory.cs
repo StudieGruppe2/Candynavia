@@ -4,6 +4,7 @@ namespace Backend.Repositories;
 public class TimeSlotRepositoryMemory : ITimeSlotRepository
 {
     private List<TimeSlot> timeSlots = new List<TimeSlot>();
+    private readonly object reservationLock = new object();
 
 
     public TimeSlotRepositoryMemory()
@@ -27,26 +28,25 @@ public class TimeSlotRepositoryMemory : ITimeSlotRepository
     }
 
     */
-
+    
     public bool ReserveTimeSlot(int TimeSlot_Id, string status)
     {
-
-        // Finder timeSlotId ud fra dens ID
-        // FirstOrDefault returnerer null, hvis købsanmodningen ikke findes
-        TimeSlot? timeSlot = timeSlots.FirstOrDefault(t => t.TimeSlot_Id == TimeSlot_Id);
-
-
-        // Hvis timeslottet ikke findes, returneres false
-        if (timeSlot == null)
+        lock (reservationLock) //koden sættes i en lock for at både opdateringen, kontrollen og opslaget gøres mens ingen andre kan gøre det samme på samme tidspunkt
         {
-            return false;
+            // Finder TimeSlot ud fra dets ID
+            TimeSlot? timeSlot = timeSlots.FirstOrDefault(t => t.TimeSlot_Id == TimeSlot_Id);
+
+            //Hvis TimeSlot ikke findes eller ikke er ledigt returneres false
+            if (timeSlot == null || timeSlot.Status != "Available")
+            {
+                return false;
+            }
+
+            //Ændrer TimeSlots status til den nye status
+            timeSlot.Status = status;
+
+            //Returnerer true, fordi status blev opdateret
+            return true;
         }
-
-        // Ændrer timeslot status til den nye status
-        timeSlot.Status = status;
-
-        // Returnerer true, fordi status blev opdateret
-        return true;
-
     }
 }

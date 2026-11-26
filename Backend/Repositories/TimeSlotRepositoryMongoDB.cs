@@ -5,8 +5,6 @@ namespace Backend.Repositories;
 
 public class TimeSlotRepositoryMongoDB : ITimeSlotRepository
 {
-    // ---------- FORBINDELSE TIL MONGODB ----------
-     //Forbindelsen til samlingen "SalesPersons" i mongoDB
     //Forbindelsen til samlingen "TimeSlots" i mongoDB
     private readonly IMongoCollection<TimeSlot> timeSlotCollection;
 
@@ -57,17 +55,19 @@ public class TimeSlotRepositoryMongoDB : ITimeSlotRepository
 
     public bool ReserveTimeSlot(int TimeSlot_Id, string status)
     {
-        // Finder timeSlot ud fra dens ID
-        FilterDefinition<TimeSlot> filter = Builders<TimeSlot>.Filter.Eq(p => p.TimeSlot_Id, TimeSlot_Id);
+        //Finder tidspunktet ud fra ID, hvis det stadig er ledigt
+        FilterDefinition<TimeSlot> filter = Builders<TimeSlot>.Filter.And( //And siger at begge betingelser skal være opfyldt
+            Builders<TimeSlot>.Filter.Eq(p => p.TimeSlot_Id, TimeSlot_Id),
+            Builders<TimeSlot>.Filter.Eq(p => p.Status, "Available") //Status skal være available 
+        );
 
-        // Angiver, at det kun er timeSlots Status, der skal ændres
+        //Angiver at det kun er TimeSlots status der skal ændres
         UpdateDefinition<TimeSlot> update = Builders<TimeSlot>.Update.Set(p => p.Status, status);
 
-        // Opdaterer timeSlot i MongoDB
+        //Opdaterer TimeSlot i MongoDB, og tager filter og update som parametre
         UpdateResult result = timeSlotCollection.UpdateOne(filter, update);
 
-        // Returnerer true, hvis timeSlot blev fundet
-        // Ellers returneres false
-        return result.MatchedCount == 1;
+        //Returnerer true hvis status blev ændret
+        return result.ModifiedCount == 1; //ModifidCount = property i MongoDB-driveren, som fortæller hvor mange dokumenter der faktisk blev opdateret
     }
 }
