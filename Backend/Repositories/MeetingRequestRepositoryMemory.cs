@@ -25,11 +25,13 @@ public class MeetingRequestRepositoryMemory : IMeetingRequestRepository
        return meetingRequests.FirstOrDefault(m => m.MeetingRequest_Id == meetingRequest_Id);
    }
      
-    /*----Opret ny forespørgsel----*/
+   /*----Opret ny forespørgsel----*/
    public MeetingRequest Add(MeetingRequest meetingRequest)
-    {
-       Add(meetingRequest);
-       return meetingRequest;  
-    }
-
+   {
+       // Tilføjer forespørgslen til listen
+       meetingRequests.Add(meetingRequest);
+ 
+       // Returnerer den gemte forespørgsel til controlleren
+       return meetingRequest;
+   }
 }

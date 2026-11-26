@@ -9,19 +9,20 @@ builder.Services.AddControllers();
 // Dependency Injection: .NET får besked på, hvilket repository
 // den skal give til controllerne, når de beder om et interface
 
-// Memory-repositories (bruges ikke lige nu)
+/*
+// Memory-repositories
 builder.Services.AddSingleton<IPostalCodeRepository, PostalCodeRepositoryMemory>();
 builder.Services.AddSingleton<IMeetingRequestRepository, MeetingRequestRepositoryMemory>();
 builder.Services.AddSingleton<ISalesPersonRepository, SalesPersonRepositoryMemory>();
 builder.Services.AddSingleton<ITimeSlotRepository, TimeSlotRepositoryMemory>();
+*/
 
-/*
-// MongoDB-repositories (bruges lige nu)
+//MongoDB-repositories
 builder.Services.AddSingleton<ISalesPersonRepository, SalesPersonRepositoryMongoDB>();
 builder.Services.AddSingleton<IPostalCodeRepository, PostalCodeRepositoryMongoDB>();
 builder.Services.AddSingleton<ITimeSlotRepository, TimeSlotRepositoryMongoDB>();
 builder.Services.AddSingleton<IMeetingRequestRepository, MeetingRequestRepositoryMongoDB>();
-*/
+
 
 // Giver frontend lov til at kalde backend
 builder.Services.AddCors(OpsaetCors);
