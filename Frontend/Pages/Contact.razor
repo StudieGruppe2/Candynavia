@@ -13,16 +13,13 @@
 
     <!--Fælles container til Danmarkskort og søgning-->
     <div class="sales-container">
-
         <!--Danmarkskort med salgsområderne og sælgere-->
         <div class="map-container">
-
             <img src="Pictures/CandynaviaDKKort.png"
                  alt="Danmarkskort over Candynavias salgsområder"
                  class="sales-map" />
-
         </div>
-
+       
         <!--Boks til søgning efter sælger-->
         <div class="Search-container">
             <h2>Find din lokale sælger</h2>
@@ -34,9 +31,10 @@
                 <input type="text"
                        placeholder="Indtast postnummer"
                        maxlength="4"
-                       @bind-value="searchText" />
+                       @bind-value="PostalCode" />
                 <div>
-                    <button class="btn-primary" @onclick="Search">
+                    <button class="btn-primary"
+                            @onclick="() => SeeSalesPersonByPostalCode(PostalCode)">
                         Find din sælger
                     </button>
                 </div>
@@ -47,12 +45,11 @@
 
 
 @code {
-
-    string searchText = ""; //Hvad der skrives i søgefeltet - pr. default tom
-
-    private async Task Search()
+    private string PostalCode = ""; //gemmer postnummeret fra søgefeltet
+    
+    //Finder sælgeren ud fra det indtastede postnummer
+    private async Task SeeSalesPersonByPostalCode(string PostalCode)
     {
-
+   
     }
-
 }
