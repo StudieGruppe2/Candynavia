@@ -137,6 +137,23 @@ p {
 }
 
 
+/*Resultat af søgning*/
+/* Fejlbesked, hvis der ikke findes en sælger */
+.message-error {
+    color: #78162D;
+}
+
+/* Den fundne sælger under søgelinjen */
+.salesperson-result {
+    padding-top: 24px;
+    border-top: 1px solid #E9DFD8;
+}
+
+.salesperson-result h3 {
+    margin: 0;
+}
+
+
 /*Responsivt design*/
 /* Placerer boksene under hinanden på mindre skærme */
 @media (max-width: 768px) {

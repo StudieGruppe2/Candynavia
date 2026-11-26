@@ -1,4 +1,5 @@
 @page "/"
+@inject HttpClient Http
 
 <div class="contact-container">
 
@@ -19,7 +20,7 @@
                  alt="Danmarkskort over Candynavias salgsområder"
                  class="sales-map" />
         </div>
-       
+
         <!--Boks til søgning efter sælger-->
         <div class="Search-container">
             <h2>Find din lokale sælger</h2>
@@ -39,17 +40,57 @@
                     </button>
                 </div>
             </div>
+
+            <!--Fejlbesked, hvis der ikke findes en sælger-->
+            @if (errorMessage != null)
+            {
+                <p class="message-error">@errorMessage</p>
+            }
+
+            <!--Den fundne sælger vises under søgningen-->
+            @if (salesPerson != null)
+            {
+                <div class="salesperson-result">
+                    <p class="overline">DIN SÆLGER</p>
+                    <h3>@salesPerson.Name</h3>
+                    <p>@salesPerson.Position</p>
+                    <p>@salesPerson.Email<br />@salesPerson.Phone</p>
+
+                    <button class="btn-primary" @onclick="() => selectedSalesPerson = salesPerson">
+                        Book møde
+                    </button>
+                </div>
+            }
         </div>
     </div>
 </div>
 
+<!--Modalvindue til booking - åbner, når selectedSalesPerson har en værdi-->
+<BookingWindow SalesPerson="selectedSalesPerson" OnClose="() => selectedSalesPerson = null" />
+
 
 @code {
     private string PostalCode = ""; //gemmer postnummeret fra søgefeltet
-    
+
+    private SalesPerson? salesPerson;         //Sælgeren, der blev fundet
+    private SalesPerson? selectedSalesPerson; //Når denne sættes, åbner modalen
+    private string? errorMessage;             //Fejlbesked til brugeren
+
     //Finder sælgeren ud fra det indtastede postnummer
     private async Task SeeSalesPersonByPostalCode(string PostalCode)
     {
-   
+        errorMessage = null;
+        salesPerson = null;
+
+        try
+        {
+            //Henter sælgeren fra backend ud fra postnummeret
+            salesPerson = await Http.GetFromJsonAsync<SalesPerson>($"SalesPerson/postalcode/{PostalCode}");
+        }
+        catch
+        {
+            //Hvis der ikke findes en sælger
+            errorMessage = "Vi kunne ikke finde en sælger til det postnummer.";
+        }
     }
 }

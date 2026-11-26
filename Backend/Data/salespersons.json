@@ -1,0 +1,6 @@
+[
+  { "SalesPerson_Id": 1, "Name": "Mette Hansen",   "Email": "mette@candynavia.dk",  "Phone": "11223344", "Position": "Sales Manager" },
+  { "SalesPerson_Id": 2, "Name": "Jonas Berg",     "Email": "jonas@candynavia.dk",  "Phone": "22334455", "Position": "Sales Representative" },
+  { "SalesPerson_Id": 3, "Name": "Sofie Lund",     "Email": "sofie@candynavia.dk",  "Phone": "33445566", "Position": "Sales Representative" },
+  { "SalesPerson_Id": 4, "Name": "Rasmus Nielsen", "Email": "rasmus@candynavia.dk", "Phone": "44556677", "Position": "Key Account Manager" }
+]

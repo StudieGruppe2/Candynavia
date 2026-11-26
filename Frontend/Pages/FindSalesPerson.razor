@@ -1,0 +1,27 @@
+@page "/find-salesperson"
+@inject HttpClient Http
+
+<input placeholder="Postal code" @bind="postalCode" />
+<button @onclick="Search">Find sales person</button>
+
+@if (salesPerson != null)
+{
+    <div class="salesperson-card">
+        <h3>@salesPerson.Name</h3>
+        <p>@salesPerson.Position</p>
+        <button @onclick="() => selectedSalesPerson = salesPerson">Book meeting</button>
+    </div>
+}
+
+<BookingModal SalesPerson="selectedSalesPerson" OnClose="() => selectedSalesPerson = null" />
+
+@code {
+    private string postalCode = "";
+    private SalesPerson? salesPerson;         // Sælgeren, der blev fundet
+    private SalesPerson? selectedSalesPerson; // Når denne sættes, åbner modalen
+
+    private async Task Search()
+    {
+        salesPerson = await Http.GetFromJsonAsync<SalesPerson>($"SalesPerson/postalcode/{postalCode}");
+    }
+}

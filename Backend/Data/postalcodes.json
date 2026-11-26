@@ -1,0 +1,7 @@
+[
+  { "PostalCodeArea_Id": 1, "PostalCode": "1000", "CityName": "København K", "SalesPerson_Id": 1 },
+  { "PostalCodeArea_Id": 2, "PostalCode": "4000", "CityName": "Roskilde",    "SalesPerson_Id": 1 },
+  { "PostalCodeArea_Id": 3, "PostalCode": "5000", "CityName": "Odense C",    "SalesPerson_Id": 2 },
+  { "PostalCodeArea_Id": 4, "PostalCode": "8000", "CityName": "Aarhus C",    "SalesPerson_Id": 3 },
+  { "PostalCodeArea_Id": 5, "PostalCode": "9000", "CityName": "Aalborg",     "SalesPerson_Id": 4 }
+]

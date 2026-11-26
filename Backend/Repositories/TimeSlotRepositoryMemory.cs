@@ -1,9 +1,17 @@
+using System.Text.Json;
 using Core;
 namespace Backend.Repositories;
 
 public class TimeSlotRepositoryMemory : ITimeSlotRepository
 {
     private List<TimeSlot> timeSlots = new List<TimeSlot>();
+
+    public TimeSlotRepositoryMemory()
+    {
+        // Læser testdata fra Data/timeslots.json
+        string json = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Data", "timeslots.json"));
+        timeSlots = JsonSerializer.Deserialize<List<TimeSlot>>(json) ?? new List<TimeSlot>();
+    }
     private readonly object reservationLock = new object();
 
     public TimeSlot? GetTimeSlotById(int TimeSlot_Id)

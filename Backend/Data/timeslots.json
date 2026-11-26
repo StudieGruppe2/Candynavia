@@ -1,0 +1,7 @@
+[
+  { "TimeSlot_Id": 1, "SalesPerson_Id": 1, "StartTime": "2026-12-01T09:00:00", "EndTime": "2026-12-01T10:00:00", "Status": "Available" },
+  { "TimeSlot_Id": 2, "SalesPerson_Id": 1, "StartTime": "2026-12-01T13:00:00", "EndTime": "2026-12-01T14:00:00", "Status": "Reserved" },
+  { "TimeSlot_Id": 3, "SalesPerson_Id": 1, "StartTime": "2026-12-02T10:00:00", "EndTime": "2026-12-02T11:00:00", "Status": "Available" },
+  { "TimeSlot_Id": 4, "SalesPerson_Id": 2, "StartTime": "2026-12-01T10:00:00", "EndTime": "2026-12-01T11:00:00", "Status": "Available" },
+  { "TimeSlot_Id": 5, "SalesPerson_Id": 3, "StartTime": "2026-12-01T11:00:00", "EndTime": "2026-12-01T12:00:00", "Status": "Available" }
+]
