@@ -1,22 +1,60 @@
-/*Header*/
+/* ---------- Fælles farver og skrifttyper ---------- */
+
+/* Variablerne nedarves til underliggende komponenter,
+   herunder ContactPage */
+
+.site-layout {
+
+    /* Primære farver */
+    --primary-color: #78162D;
+    --primary-hover: #591022;
+
+    /* Sekundære farver */
+    --secondary-color: #B76E78;
+    --accent-color: #F1DEDF;
+
+    /* Baggrundsfarver */
+    --background-color: #F7F1EB;
+    --surface-color: #FCF9F6;
+
+    /* Tekstfarver */
+    --text-color: #261B1B;
+    --text-secondary: #625959;
+
+    /* Kanter og afrunding */
+    --border-color: #E9DFD8;
+    --border-radius: 16px;
+
+    /* Skrifttyper */
+    --font-heading: Georgia, serif;
+    --font-body: Arial, sans-serif;
+
+    /* Generel styling */
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+
+/* ---------- Header ---------- */
+
+/* Placerer logo og navigation vandret */
+
 .main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     padding: 16px 4%;
-    gap: 24px;
 
     background-color: var(--surface-color);
     border-bottom: 1px solid var(--border-color);
 }
 
 
-/*Logo-*/
-.logo {
-    display: flex;
-    align-items: center;
-}
+/* ---------- Logo ---------- */
 
 .logo img {
     width: 210px;
@@ -24,61 +62,41 @@
 }
 
 
-/*Navigation*/
+/* ---------- Navigation ---------- */
+
 .main-nav {
     display: flex;
     align-items: center;
     gap: 32px;
 }
 
+/* ::deep anvendes, fordi NavLink er en Blazor-komponent,
+   som genererer et HTML-link */
+
 .main-nav ::deep a {
     color: var(--text-color);
-    font-family: var(--font-body);
     font-size: 16px;
     font-weight: 600;
-
     text-decoration: none;
     padding: 10px 4px;
-
-    border-bottom: 2px solid transparent;
 }
+
+/* Skifter farve, når musen holdes over linket */
 
 .main-nav ::deep a:hover {
     color: var(--primary-color);
 }
 
+/* Fremhæver den aktive side */
 
-/*Aktiv side*/
 .main-nav ::deep a.active {
     color: var(--primary-color);
     border-bottom: 2px solid var(--primary-color);
 }
 
 
-/*Telefonknap*/
-.phone-button {
-    background-color: var(--primary-color);
-    color: white;
+/* ---------- Sidens indhold ---------- */
 
-    padding: 12px 20px;
-    border-radius: 10px;
-
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-
-    transition: background-color 0.2s ease;
-}
-
-.phone-button:hover {
-    background-color: var(--primary-hover);
-    color: white;
-}
-
-
-/*Sidens indhold*/
 .main-content {
-    min-height: calc(100vh - 80px);
-    background-color: var(--background-color);
+    padding: 40px 4%;
 }

@@ -1,37 +1,7 @@
-/*Farver og skrifttyper*/
-:root {
-    --primary-color: #78162D;
-    --primary-hover: #591022;
+/*Generel styling af kontaktsiden*/
 
-    --secondary-color: #B76E78;
-    --accent-color: #F1DEDF;
-
-    --background-color: #F7F1EB;
-    --surface-color: #FCF9F6;
-
-    --text-color: #261B1B;
-    --text-secondary: #625959;
-    --border-color: #E9DFD8;
-
-    --font-heading: Georgia, serif;
-    --font-body: Arial, sans-serif;
-
-    --border-radius: 16px;
-}
-
-
-/*Generel styling*/
 * {
     box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.6;
 }
 
 
@@ -41,7 +11,7 @@ h1 {
     font-size: 48px;
     font-weight: 700;
     line-height: 1.2;
-    margin-bottom: 12px;
+    margin: 0 0 12px;
     color: var(--text-color);
 }
 
@@ -79,6 +49,8 @@ p {
     margin-bottom: 16px;
 }
 
+
+/*Lille rosa overskrift over hovedoverskriften*/
 .overline {
     font-size: 14px;
     font-weight: 600;
@@ -88,6 +60,8 @@ p {
     margin-bottom: 8px;
 }
 
+
+/*Links*/
 a {
     color: var(--primary-color);
     text-decoration: none;
@@ -133,7 +107,49 @@ a:hover {
     background-color: var(--accent-color);
 }
 
+
+/*Deaktiverede knapper*/
 button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+
+/*Cards*/
+.content-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: 0 5px 15px rgba(66, 30, 35, 0.06);
+}
+
+
+/*Danmarkskor*/
+/* Bevarer billedets proportioner */
+.sales-map {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/*Responsivt design*/
+@media (max-width: 768px) {
+
+    h1 {
+        font-size: 32px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    .content-card {
+        padding: 16px;
+    }
 }
