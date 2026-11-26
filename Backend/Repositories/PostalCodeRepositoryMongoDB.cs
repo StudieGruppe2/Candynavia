@@ -13,22 +13,27 @@ public class PostalCodeRepositoryMongoDB : IPostalCodeRepository
     //Constructoren køres når repositoriet bliver oprettet
     public PostalCodeRepositoryMongoDB(IConfiguration configuration)
     {
-        // Fortæller MongoDB, at MeetingRequest_Id er nøglen (_id)
+        // Fortæller MongoDB, at PostalCodeArea_Id er nøglen (_id)
         if (!BsonClassMap.IsClassMapRegistered(typeof(PostalCodeArea)))
         {
-            BsonClassMap<MeetingRequest> map = new BsonClassMap<MeetingRequest>();
+            BsonClassMap<PostalCodeArea> map = new BsonClassMap<PostalCodeArea>();
             map.AutoMap();
-            map.MapIdMember(typeof(MeetingRequest).GetProperty("PostalCodeArea_Id")!);
+            map.MapIdMember(typeof(PostalCodeArea).GetProperty("PostalCodeArea_Id")!);
             BsonClassMap.RegisterClassMap(map);
         }
 
-        // Henter connection stringen fra User Secrets (ligger på hver persons egen computer)
+        // Henter connection stringen fra User Secrets
         string connectionString = configuration["MongoDB:ConnectionString"]!;
+
+        // Opretter MongoDB-klienten
         MongoClient client = new MongoClient(connectionString);
+
+        // Vælger databasen
         IMongoDatabase database = client.GetDatabase("CandynaviaDB");
 
+        // Vælger collection
         postalCodeCollection = database.GetCollection<PostalCodeArea>("PostalCodeAreas");
-    } 
+    }
     
     // Henter alle postnumre
     public List<PostalCodeArea> GetAllPostalCodes()

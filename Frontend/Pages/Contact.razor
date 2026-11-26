@@ -72,9 +72,9 @@
 @code {
     private string PostalCode = ""; //gemmer postnummeret fra søgefeltet
 
-    private SalesPerson? salesPerson;         //Sælgeren, der blev fundet
-    private SalesPerson? selectedSalesPerson; //Når denne sættes, åbner modalen
-    private string? errorMessage;             //Fejlbesked til brugeren
+    private SalesPerson? salesPerson; //Sælgeren, der blev fundet
+    private SalesPerson? selectedSalesPerson;//Når denne sættes, åbner modalen
+    private string? errorMessage; //Fejlbesked til brugeren
 
     //Finder sælgeren ud fra det indtastede postnummer
     private async Task SeeSalesPersonByPostalCode(string PostalCode)
