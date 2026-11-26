@@ -30,44 +30,42 @@ public class TimeSlotRepositoryMongoDB : ITimeSlotRepository
     }
     
   
-    
-    public TimeSlot? GetTimeSlotById(int TimeSlot_Id)
+    /*----Henter et specifikt mødetidspunkt udfra dets id----*/
+    public TimeSlot? GetTimeSlotById(int timeSlot_Id)
     {
-        return timeSlotCollection.Find(t => t.TimeSlot_Id == TimeSlot_Id).FirstOrDefault();
+        return timeSlotCollection.Find(t => t.TimeSlot_Id == timeSlot_Id).FirstOrDefault();
     }
 
-    public List<TimeSlot> GetAvailableTimeSlots(int SalesPerson_Id)
+   
+    /*----Henter en sælgers ledige og fremtidige mødetidspunkter----*/
+    public List<TimeSlot> GetAvailableTimeSlots(int salesPerson_Id)
     {
-         FilterDefinition<TimeSlot> filter = 
-             Builders<TimeSlot>.Filter.Eq("SalesPerson_Id", SalesPerson_Id)
-            & Builders<TimeSlot>.Filter.Eq(t => t.Status, "Available");
-         
-         return timeSlotCollection.Find(filter).ToList();
+            return timeSlotCollection.Find(t =>
+                t.SalesPerson_Id == salesPerson_Id &&
+                t.Status == "Available" &&
+                t.StartTime > DateTime.UtcNow).ToList();
     } 
 
-
-    /*
-    public <TimeSlot> GetTimeSlotsBySalesPersonId(int SalesPerson_Id)
+    /*----Reserverer et mødetidspunkt, hvis det stadig er ledigt----*/
+    public bool ReserveTimeSlot(int timeSlotId)
     {
-        
-    }
-    */
+        //Finder tidspunktet, hvis alle tre betingelser er opfyldt: tid i fremtiden, tidspunkt tilhøre valgt sælger og har status available
+        FilterDefinition<TimeSlot> filter =
+            Builders<TimeSlot>.Filter.And(
+                Builders<TimeSlot>.Filter.Eq(t => t.TimeSlot_Id, timeSlotId),
+                Builders<TimeSlot>.Filter.Eq(t => t.Status, "Available"),
+                Builders<TimeSlot>.Filter.Gt(t => t.StartTime, DateTime.UtcNow)
+            );
 
-    public bool ReserveTimeSlot(int TimeSlot_Id, string status)
-    {
-        //Finder tidspunktet ud fra ID, hvis det stadig er ledigt
-        FilterDefinition<TimeSlot> filter = Builders<TimeSlot>.Filter.And( //And siger at begge betingelser skal være opfyldt
-            Builders<TimeSlot>.Filter.Eq(p => p.TimeSlot_Id, TimeSlot_Id),
-            Builders<TimeSlot>.Filter.Eq(p => p.Status, "Available") //Status skal være available 
-        );
+        //en definition som siger at tidspunktets status skal ændres til Reserved
+        UpdateDefinition<TimeSlot> update = Builders<TimeSlot>.Update.Set(t => t.Status, "Reserved");
 
-        //Angiver at det kun er TimeSlots status der skal ændres
-        UpdateDefinition<TimeSlot> update = Builders<TimeSlot>.Update.Set(p => p.Status, status);
-
-        //Opdaterer TimeSlot i MongoDB, og tager filter og update som parametre
+        //Opdaterer tidspunktet i MongoDB
         UpdateResult result = timeSlotCollection.UpdateOne(filter, update);
 
-        //Returnerer true hvis status blev ændret
-        return result.ModifiedCount == 1; //ModifidCount = property i MongoDB-driveren, som fortæller hvor mange dokumenter der faktisk blev opdateret
+        //ModifiedCount angiver antallet af ændrede dokumenter i MongoDB.
+        //Hvis tidspunktet allerede er reserveret, opfyldes filteret ikke, og ModifiedCount bliver 0. Dette forhindrer dobbeltbooking af samme TimeSlot.
+        return result.ModifiedCount == 1; 
+                                          
     }
 }

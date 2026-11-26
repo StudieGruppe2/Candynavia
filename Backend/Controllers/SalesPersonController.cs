@@ -25,18 +25,32 @@ public class SalesPersonController : ControllerBase
     [HttpGet("postalcode/{postalCode}")]
     public ActionResult<SalesPerson> GetByPostalCode(string postalCode)
     {
-        PostalCodeArea? area = postalCodeRepository.GetByPostalCode(postalCode);
-        if (area == null)
+        //Kontrollerer, at postnummeret består af fire tegn
+        if (postalCode.Length != 4)
         {
-            return NotFound();
-        }
-        
-        SalesPerson? salesPerson = salesPersonRepository.GetSalesPersonById(area.SalesPerson_Id);
-        if (salesPerson == null)
-        {
-            return NotFound();
+            return BadRequest("The postal code must contain four digits");
         }
 
+        //Finder postnummerområdet ud fra kundens postnummer
+        PostalCodeArea? postalCodeArea =
+            postalCodeRepository.GetByPostalCode(postalCode);
+
+        //Returnerer 404, hvis postnummerområdet ikke findes
+        if (postalCodeArea == null)
+        {
+            return NotFound("The postal code does not exist");
+        }
+
+        //Finder den sælger, der er tilknyttet postnummerområdet
+        SalesPerson? salesPerson = salesPersonRepository.GetSalesPersonById(postalCodeArea.SalesPerson_Id);
+
+        //Kontrollerer, at den tilknyttede sælger eksisterer
+        if (salesPerson == null)
+        {
+            return NotFound("No sales person found for this postal code");
+        }
+
+        // Returnerer den fundne sælger til frontend
         return salesPerson;
     }
 }

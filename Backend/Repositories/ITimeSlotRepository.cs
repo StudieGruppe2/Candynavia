@@ -1,19 +1,18 @@
-using Core; // Giver adgang til Annonce-klassen fra Core
+using Core; // Giver adgang til modelklasserne
+
 namespace Backend.Repositories;
 
+//Interfacet fungerer som en kontrakt, der bestemmer hvilke metoder TimeSlotRepositoryMongoDB og TimeSlotRepositoryMemory skal have
 public interface ITimeSlotRepository
-// Interfacet fungerer som en kontrakt, der bestemmer hvilke metoder
-// Både TimeSlotRepositoryMongoDB og TimeSlotRepositoryMemory skal have
-{ 
-    // // Henter alle time slots (ledige tider)
-    // List<TimeSlot> betyder, at metoden returnerer en liste med time slots (ledige tider)
-    // List<TimeSlot> GetAll();
-    TimeSlot? GetTimeSlotById(int TimeSlot_Id);
-    List<TimeSlot> GetAvailableTimeSlots(int SalesPerson_Id);
-    // List<TimeSlot> GetTimeSlotsBySalesPersonId(int SalesPerson_Id);
-    bool ReserveTimeSlot(int TimeSlot_Id, string status);
+{
+    //Henter et specifikt mødetidspunkt ud fra dets ID
+    TimeSlot? GetTimeSlotById(int timeSlotId);
 
-    //Mangler DateTime fra core klassen
+    //Henter alle ledige mødetidspunkter for en bestemt sælger
+    List<TimeSlot> GetAvailableTimeSlots(int salesPersonId);
+
+    //Reserverer et mødetidspunkt, hvis det stadig er ledigt
+    //Returnerer true ved succes og ellers false
+    bool ReserveTimeSlot(int timeSlotId);
     
-
 }

@@ -1,5 +1,4 @@
 using Backend.Repositories;
-using Core;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +32,7 @@ var app = builder.Build();
 // Skal stå før MapControllers
 app.UseCors();
 
+// Skal anvendes ved senere implementering af adgangskontrol for sælgere
 app.UseAuthorization();
 
 app.MapControllers();

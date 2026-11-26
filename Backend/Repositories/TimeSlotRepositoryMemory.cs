@@ -4,50 +4,56 @@ namespace Backend.Repositories;
 
 public class TimeSlotRepositoryMemory : ITimeSlotRepository
 {
-    private List<TimeSlot> timeSlots = new List<TimeSlot>();
+    //Gemmer mødetidspunkterne i hukommelsen i stedet for en database
+    private readonly List<TimeSlot> timeSlots = new List<TimeSlot>();
+    
+    //Forhindrer konflikter ved samtidige reservationer
+    private readonly object reservationLock = new object();
 
     public TimeSlotRepositoryMemory()
     {
-        // Læser testdata fra Data/timeslots.json
+        //Læser testdata fra Data/timeslots.json
         string json = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Data", "timeslots.json"));
         timeSlots = JsonSerializer.Deserialize<List<TimeSlot>>(json) ?? new List<TimeSlot>();
     }
-    private readonly object reservationLock = new object();
 
+   /*----henter et specifikt mødetidspunkt ud fra dets id----*/
     public TimeSlot? GetTimeSlotById(int TimeSlot_Id)
     {
         return timeSlots.FirstOrDefault(t => t.TimeSlot_Id == TimeSlot_Id);
     }
 
-    public List<TimeSlot> GetAvailableTimeSlots(int SalesPerson_Id)
+    /*----Henter en sælgers ledige og fremtidige mødetidspunkter----*/
+    public List<TimeSlot> GetAvailableTimeSlots(int salesPersonId)
     {
-        return timeSlots.Where(t => t.SalesPerson_Id == SalesPerson_Id).ToList();
-    } 
-    
-    /* public List<TimeSlot> GetTimeSlotsBySalesPersonId(int SalesPerson_Id)
-    {
-        Den gør den samme den ovenover ??
-    }
-
-    */
-    
-    public bool ReserveTimeSlot(int TimeSlot_Id, string status)
-    {
-        lock (reservationLock) //koden sættes i en lock for at både opdateringen, kontrollen og opslaget gøres mens ingen andre kan gøre det samme på samme tidspunkt
+        lock (reservationLock)
         {
-            // Finder TimeSlot ud fra dets ID
-            TimeSlot? timeSlot = timeSlots.FirstOrDefault(t => t.TimeSlot_Id == TimeSlot_Id);
+            return timeSlots.Where(t =>
+                t.SalesPerson_Id == salesPersonId &&
+                t.Status == "Available" &&
+                t.StartTime > DateTime.UtcNow).ToList();
+        }
+    }
+    
+    /*----Reserverer et mødetidspunkt, hvis det stadig er ledigt----*/
+    public bool ReserveTimeSlot(int timeSlotId)
+    {
+        // Sikrer, at opslag, kontrol og reservation udføres uden at en anden forespørgsel kan reservere tidspunktet samtidig
+        lock (reservationLock)
+        {
+            //Finder mødetidspunktet ud fra dets ID
+            TimeSlot? timeSlot = timeSlots.FirstOrDefault(t => t.TimeSlot_Id == timeSlotId);
 
-            //Hvis TimeSlot ikke findes eller ikke er ledigt returneres false
-            if (timeSlot == null || timeSlot.Status != "Available")
+            //Returnerer false, hvis tidspunktet ikke findes, ikke er ledigt eller ligger i fortiden
+            if (timeSlot == null || timeSlot.Status != "Available" || timeSlot.StartTime <= DateTime.UtcNow)
             {
                 return false;
             }
 
-            //Ændrer TimeSlots status til den nye status
-            timeSlot.Status = status;
+            //Ændrer tidspunktets status til Reserved
+            timeSlot.Status = "Reserved";
 
-            //Returnerer true, fordi status blev opdateret
+            //Returnerer true, fordi reservationen lykkedes
             return true;
         }
     }

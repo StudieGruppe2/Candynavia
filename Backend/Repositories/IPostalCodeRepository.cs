@@ -6,9 +6,10 @@ namespace Backend.Repositories;
 public interface IPostalCodeRepository
 {
     // Henter alle postnumre
-    public List<PostalCodeArea> GetAllPostalCodes();
+   // List<PostalCodeArea> GetAllPostalCodes(); // TODO: Kontrollér, om metoden er nødvendig i den nuværende løsning.
+
     
-    //Henter et specifikt postnummer
-   public  PostalCodeArea? GetByPostalCode(string PostalCode);
+    //Henter et specifikt postnummer og returnere null hvis postnummeret ikke findes
+   PostalCodeArea? GetByPostalCode(string postalCode);
 
 }

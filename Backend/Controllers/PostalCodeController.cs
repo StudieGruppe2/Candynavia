@@ -19,27 +19,31 @@ public class PostalCodeController : ControllerBase
         this.postalCodeRepository = postalCodeRepository;
     }
 
-    /*----Hent alle postnumre----**/
-    [HttpGet]
+    
+    /*----Hent alle postnumre----*/
+    /*[HttpGet]
     public ActionResult<List<PostalCodeArea>> GetAll()
     {
         return postalCodeRepository.GetAllPostalCodes();
     }
+    */  //HAR VI BRUG FOR DEN??
 
-    /*----Hent bestemt postnummer----*/
+    /*----Henter et specifikt postnummerområde----*/
     [HttpGet("{postalCode}")]
-    public ActionResult<PostalCodeArea> GetByPostalCode(string PostalCode)
+    public ActionResult<PostalCodeArea> GetByPostalCode(string postalCode)
     {
-        // Leder efter postalCode i repository
-        PostalCodeArea? postalCode = postalCodeRepository.GetByPostalCode(PostalCode);
+        //Finder postnummerområdet i repositoryet
+        PostalCodeArea? postalCodeArea =
+            postalCodeRepository.GetByPostalCode(postalCode);
 
-        // Hvis postalcode ikke findes, returneres 404 Not Found
-        if (postalCode == null)
+        //Hvis postnummeret ikke findes, returneres 404 Not Found
+        if (postalCodeArea == null)
         {
-            return NotFound("Postal Code does not exist.");
+            return NotFound("Postal code does not exist.");
         }
-        // Returnerer annoncen til frontend
-        return postalCode;
+
+        //Returnerer det fundne postnummerområde
+        return postalCodeArea;
     }
 
 }

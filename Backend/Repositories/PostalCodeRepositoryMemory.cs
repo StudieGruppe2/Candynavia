@@ -22,9 +22,9 @@ public class PostalCodeRepositoryMemory : IPostalCodeRepository
     }
 
     //Henter et specifikt postnummer
-   public PostalCodeArea? GetByPostalCode(string PostalCode)
+   public PostalCodeArea? GetByPostalCode(string postalCode)
     {
-        return postalCodeAreas.FirstOrDefault(p => p.PostalCode == PostalCode);
+        return postalCodeAreas.FirstOrDefault(p => p.PostalCode == postalCode);
     }
 
 }

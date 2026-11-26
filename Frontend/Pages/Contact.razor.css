@@ -1,10 +1,10 @@
-/* Container til kontaktsiden */
+/*----Container----*/
 .contact-container {
     font-family: Arial, sans-serif;
 }
 
 
-/*Overskrifter*/
+/*----Overskrifter og tekst----*/
 h1 {
     font-family: Georgia, serif;
     font-size: 48px;
@@ -21,28 +21,18 @@ h2 {
 }
 
 h3 {
-    font-family: Arial, sans-serif;
     font-size: 20px;
     font-weight: 600;
     color: #261B1B;
 }
 
-h4 {
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    color: #261B1B;
-}
-
-
-/*Brødtekst*/
 p {
-    font-family: Arial, sans-serif;
     font-size: 16px;
     line-height: 1.6;
     color: #625959;
 }
 
-/* Lille overskrift */
+/*Lille rosa overskrift */
 .overline {
     font-size: 14px;
     font-weight: 600;
@@ -51,8 +41,85 @@ p {
 }
 
 
-/*Knapper*/
-/* Primær knap */
+/*----Danmarkskort og søgning----*/
+/*Placerer kortet og søgeboksen ved siden af hinanden */
+.sales-container {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+}
+
+/*Fælles styling af begge bokse */
+.map-container,
+.Search-container {
+    background-color: #FCF9F6;
+    border: 1px solid #E9DFD8;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 5px 15px rgba(66, 30, 35, 0.06);
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Danmarkskortets boks fylder mest*/
+.map-container {
+    flex: 3;
+}
+
+/*Danmarkskortet bevarer sine proportioner */
+.sales-map {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/*Boks til søgning efter sælger */
+.Search-container {
+    flex: 2;
+}
+
+
+/*----Søgning---- */
+/*----Placerer søgefelt og knap ved siden af hinanden----*/
+.Searchline {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    margin: 16px 0 24px;
+}
+
+/*----Søgefelt til postnummer----*/
+.Searchline input {
+    width: 100%;
+    min-width: 0;
+    padding: 14px;
+    font-size: 16px;
+    border: 1px solid #E9DFD8;
+    border-radius: 12px;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+
+/*----Søgeresultat----*/
+
+/* Viser oplysninger om den fundne sælger */
+.salesperson-result {
+    padding-top: 24px;
+    border-top: 1px solid #E9DFD8;
+}
+
+.salesperson-result h3 {
+    margin: 0;
+}
+
+/*----Fejlbesked ved ugyldig eller mislykket søgning----*/
+.message-error {
+    color: #78162D;
+}
+
+
+/*----Knapper ----*/
 .btn-primary {
     background-color: #78162D;
     color: white;
@@ -67,105 +134,19 @@ p {
     background-color: #591022;
 }
 
-/* Sekundær knap */
-.btn-secondary {
-    background-color: #F1DEDF;
-    color: #78162D;
-    border: 1px solid #78162D;
-    border-radius: 12px;
-    padding: 14px 24px;
-    font-size: 16px;
-    cursor: pointer;
-}
 
+/*-----responsivt design----*/
 
-/*Kort og søgning*/
-/* Fælles container, som placerer boksene ved siden af hinanden */
-.sales-container {
-    display: flex;
-    gap: 24px;
-    align-items: stretch;
-}
-
-/* Fælles styling af begge bokse */
-.map-container,
-.Search-container {
-    background-color: #FCF9F6;
-    border: 1px solid #E9DFD8;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 5px 15px rgba(66, 30, 35, 0.06);
-    min-width: 0;
-    box-sizing: border-box;
-}
-
-/* Boks omkring Danmarkskortet */
-.map-container {
-    flex: 3;
-}
-
-/* Danmarkskort */
-.sales-map {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* Boks omkring søgning */
-.Search-container {
-    flex: 2;
-}
-
-/* Søgelinje */
-.Searchline {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 12px;
-    margin: 16px 0 24px;
-}
-
-/* Søgefelt til postnummer */
-.Searchline input {
-    width: 100%;
-    min-width: 0;
-    padding: 14px;
-    font-size: 16px;
-    border: 1px solid #E9DFD8;
-    border-radius: 12px;
-    background-color: white;
-    box-sizing: border-box;
-}
-
-
-/*Resultat af søgning*/
-/* Fejlbesked, hvis der ikke findes en sælger */
-.message-error {
-    color: #78162D;
-}
-
-/* Den fundne sælger under søgelinjen */
-.salesperson-result {
-    padding-top: 24px;
-    border-top: 1px solid #E9DFD8;
-}
-
-.salesperson-result h3 {
-    margin: 0;
-}
-
-
-/*Responsivt design*/
-/* Placerer boksene under hinanden på mindre skærme */
 @media (max-width: 768px) {
-
+    /* Placerer kort og søgeboks under hinanden */
     .sales-container {
         flex-direction: column;
     }
-
+    /* Placerer søgefelt og knap under hinanden */
     .Searchline {
         grid-template-columns: 1fr;
     }
-
+    /* Mindre hovedoverskrift på små skærme */
     h1 {
         font-size: 32px;
     }

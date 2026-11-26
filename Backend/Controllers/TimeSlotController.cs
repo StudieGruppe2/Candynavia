@@ -32,12 +32,12 @@ public class TimeSlotController : ControllerBase
     // ---------- HENT LEDIGE TIME SLOTS FOR EN SÆLGER ----------
     // GET /TimeSlot/salesperson/{SalesPerson_Id}
     [HttpGet("salesperson/{SalesPerson_Id}")]
-    public ActionResult<List<TimeSlot>> GetAvailableTimeSlotsBySalesPerson(int SalesPerson_Id)
+    public ActionResult<List<TimeSlot>> GetAvailableTimeSlotsBySalesPerson(int salesPerson_Id)
     {
-        // Henter alle ledige tidspunkter for sælgeren
-        List<TimeSlot> timeSlots = timeSlotRepository.GetAvailableTimeSlots(SalesPerson_Id);
+        //Henter alle ledige tidspunkter for sælgeren
+        List<TimeSlot> timeSlots = timeSlotRepository.GetAvailableTimeSlots(salesPerson_Id);
 
-        // Returnerer listen til frontend (den kan være tom)
+        //Returnerer listen til frontend (den kan være tom)
         return timeSlots;
     }
     

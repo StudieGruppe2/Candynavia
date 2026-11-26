@@ -1,17 +1,18 @@
 @inherits LayoutComponentBase
 
-<!-- Header -->
-<div class="header">
+<!--Fælles header på tværs af hjemmesidens sider-->
+<header class="header">
+    <img class="logo"
+         src="Pictures/CandynaviaLogo.png"
+         alt="Candynavia" />
 
-    <img class="logo" src="Pictures/CandynaviaLogo.png" alt="Candynavia" />
-
-    <div class="navigation">
+    <!--Navigation mellem hjemmesidens sider-->
+    <nav class="navigation">
         <a href="/" class="nav-item">Kontakt</a>
-    </div>
+    </nav>
 
-</div>
-
-<!-- Sidens indhold -->
-<div class="main-content">
+</header>
+<!--Viser indholdet fra den aktuelle side-->
+<main class="main-content">
     @Body
-</div>
+</main>

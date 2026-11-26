@@ -1,0 +1,286 @@
+@inject HttpClient Http
+
+@if (SalesPerson != null)
+{
+    <div class="modal-backdrop" @onclick="Close">
+        <div class="modal-box" @onclick:stopPropagation="true">
+
+            <button class="modal-close" @onclick="Close">✕</button>
+
+            <p class="overline">MØDEFORESPØRGSEL</p>
+            <h2>@SalesPerson.Name</h2>
+            <p>@SalesPerson.Position · @SalesPerson.Email · @SalesPerson.Phone</p>
+
+            @if (isSent)
+            {
+                <p class="message-success">
+                    Tak! Din mødeforespørgsel er modtaget. Du vil modtage en status på mail, når sælgeren har set din forespørgsel
+                </p>
+
+                <button class="btn-primary" @onclick="Close">Luk</button>
+            }
+            else
+            {
+                @if (errorMessage != null)
+                {
+                    <p class="message-error">@errorMessage</p>
+                }
+
+                @if (timeSlots == null)
+                {
+                    @if (errorMessage == null)
+                    {
+                        <p>Henter ledige tider...</p>
+                    }
+                }
+                else if (timeSlots.Count == 0)
+                {
+                    <p>Sælgeren har ingen ledige tider lige nu.</p>
+                }
+                else
+                {
+                    <div class="booking-container">
+
+                        <!--Ledige datoer-->
+                        <div class="calendar-container">
+
+                            <h3>Vælg en dato</h3>
+
+                            <div class="date-list">
+                                @foreach (DateTime date in GetAvailableDates())
+                                {
+                                    <button class="@GetButtonClass(selectedDate == date)"disabled="@isSubmitting"@onclick="() => SelectDate(date)">
+
+                                        @date.ToString("dddd dd/MM/yyyy")
+
+                                    </button>
+                                }
+                            </div>
+                        </div>
+
+                        <!--ledige tidspunkter -->
+                        <div class="available-times">
+
+                            <h3>Ledige tidspunkter</h3>
+
+                            @if (selectedDate == null)
+                            {
+                                <p>Vælg en dato.</p>
+                            }
+                            else
+                            {
+                                @foreach (TimeSlot slot in GetTimeSlotsForDate(selectedDate.Value))
+                                {
+                                    <button class="@GetButtonClass(selectedTimeSlot == slot)"disabled="@isSubmitting"@onclick="() => SelectTimeSlot(slot)">
+                                        @slot.StartTime.ToLocalTime().ToString("HH:mm")
+                                        –
+                                        @slot.EndTime.ToLocalTime().ToString("HH:mm")
+
+                                    </button>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!--Kundeformular-->
+                @if (selectedTimeSlot != null)
+                {
+                    <h3>Dine oplysninger</h3>
+
+                    <input placeholder="Navn" @bind="request.Customer.Name" />
+                    <input placeholder="Email" @bind="request.Customer.Email" />
+                    <input placeholder="Telefon" @bind="request.Customer.Phone" />
+                    <input placeholder="Virksomhed" @bind="request.Customer.Company" />
+                    <input placeholder="Stilling" @bind="request.Customer.Position" />
+
+                    <textarea placeholder="Hvad vil du gerne tale om?"
+                              @bind="request.Description"></textarea>
+
+                    <label class="consent">
+                        <input type="checkbox" @bind="request.Consent" />
+                        Jeg giver samtykke til, at mine oplysninger må bruges til at kontakte mig
+                    </label>
+
+                    <button class="btn-primary"
+                            @onclick="Submit"
+                            disabled="@isSubmitting">
+                        Send forespørgsel
+                    </button>
+                }
+            }
+        </div>
+    </div>
+}
+
+@code {
+
+    /*----Parametre fra Contact----*/
+    [Parameter] public SalesPerson? SalesPerson { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+
+
+    /*----Variabler----*/
+    private List<TimeSlot>? timeSlots;
+    private DateTime? selectedDate;
+    private TimeSlot? selectedTimeSlot;
+
+    private MeetingRequest request = new MeetingRequest();
+
+    private string? errorMessage;
+    private bool isSent;
+    private bool isSubmitting;
+
+
+    /*----Hent ledige tider----*/
+    //Køres, når bookingvinduet oprettes
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTimeSlots();
+    }
+
+    private async Task LoadTimeSlots()
+    {
+        if (SalesPerson == null)
+        {
+            return;
+        }
+
+        timeSlots = null;
+
+        HttpResponseMessage response = await Http.GetAsync(
+            $"TimeSlot/salesperson/{SalesPerson.SalesPerson_Id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            timeSlots = await response.Content.ReadFromJsonAsync<List<TimeSlot>>();
+        }
+        else
+        {
+            errorMessage = "De ledige tider kunne ikke hentes.";
+        }
+    }
+
+
+    /*-----find ledige datoer----*/
+    private List<DateTime> GetAvailableDates()
+    {
+        List<DateTime> dates = new List<DateTime>();
+
+        if (timeSlots != null)
+        {
+            foreach (TimeSlot slot in timeSlots)
+            {
+                DateTime date = slot.StartTime.ToLocalTime().Date;
+
+                //Undgår at tilføje samme dato flere gange
+                if (!dates.Contains(date))
+                {
+                    dates.Add(date);
+                }
+            }
+        }
+
+        //Sorterer datoerne kronologisk
+        dates.Sort();
+
+        return dates;
+    }
+
+
+    /*----Vælg dato og tidspunkt----*/
+    private void SelectDate(DateTime date)
+    {
+        selectedDate = date;
+        selectedTimeSlot = null;
+        errorMessage = null;
+    }
+
+    // Finder alle ledige tider på den valgte dato
+    private List<TimeSlot> GetTimeSlotsForDate(DateTime date)
+    {
+        List<TimeSlot> dailyTimeSlots = new List<TimeSlot>();
+
+        if (timeSlots != null)
+        {
+            foreach (TimeSlot slot in timeSlots)
+            {
+                if (slot.StartTime.ToLocalTime().Date == date)
+                {
+                    dailyTimeSlots.Add(slot);
+                }
+            }
+        }
+
+        return dailyTimeSlots;
+    }
+
+    private void SelectTimeSlot(TimeSlot slot)
+    {
+        selectedTimeSlot = slot;
+    }
+
+    //Fremhæver den valgte dato eller det valgte tidspunkt
+    private string GetButtonClass(bool selected)
+    {
+        if (selected == true)
+        {
+            return "time-slot selected";
+        }
+
+        return "time-slot";
+    }
+
+
+    /*----Send mødeforespørgsel----*/
+    private async Task Submit()
+    {
+        if (selectedTimeSlot == null || isSubmitting)
+        {
+            return;
+        }
+
+        errorMessage = null;
+        isSubmitting = true;
+
+        request.TimeSlot_Id = selectedTimeSlot.TimeSlot_Id;
+
+        HttpResponseMessage response =
+            await Http.PostAsJsonAsync("MeetingRequest", request);
+
+        isSubmitting = false;
+
+        if (response.IsSuccessStatusCode)
+        {
+            isSent = true;
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+        {
+            errorMessage = "Tidspunktet er ikke længere ledigt.";
+
+            selectedDate = null;
+            selectedTimeSlot = null;
+
+            //Henter de opdaterede ledige tider
+            await LoadTimeSlots();
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            errorMessage = "Udfyld alle felter og giv samtykke.";
+        }
+        else
+        {
+            errorMessage = "Der opstod en fejl. Prøv igen senere.";
+        }
+    }
+
+
+    /*----Luk bookingvinduet----*/
+    private async Task Close()
+    {
+        if (isSubmitting == false)
+        {
+            await OnClose.InvokeAsync();
+        }
+    }
+}

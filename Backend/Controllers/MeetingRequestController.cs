@@ -12,24 +12,24 @@ public class MeetingRequestController : ControllerBase
     //Controlleren bruger interfacet i stedet for et bestemt repository
     //Det kaldes Dependency Inversion og gør det muligt at skifte mellem Memory og MongoDB
     private readonly IMeetingRequestRepository meetingRequestRepository;
-    private readonly ITimeSlotRepository TimeSlotRepository;
+    private readonly ITimeSlotRepository timeSlotRepository;
 
     //Dependency Injection gennem constructoren
-    public MeetingRequestController(IMeetingRequestRepository meetingRequestRepository,
+    public MeetingRequestController(
+        IMeetingRequestRepository meetingRequestRepository,
         ITimeSlotRepository timeSlotRepository)
     {
-        // Gemmer referencerne, så de kan bruges i controllerens metoder
         this.meetingRequestRepository = meetingRequestRepository;
-        this.TimeSlotRepository = timeSlotRepository;
+        this.timeSlotRepository = timeSlotRepository;
     }
 
 
     /*----Hent mødeforespørgelser----*/
     [HttpGet]
-    public ActionResult<MeetingRequest> GetRequestById(int MeetingRequest_Id)
+    public ActionResult<MeetingRequest> GetRequestById(int meetingRequest_Id)
     {
         //Leder efter forespørgslen i repository
-        MeetingRequest? meetingRequest = meetingRequestRepository.GetById(MeetingRequest_Id);
+        MeetingRequest? meetingRequest = meetingRequestRepository.GetById(meetingRequest_Id);
 
         //Hvis forespørgslen ikke findes, returneres 404 Not Found
         if (meetingRequest == null)
@@ -47,7 +47,7 @@ public class MeetingRequestController : ControllerBase
     public ActionResult<MeetingRequest> CreateRequest(MeetingRequest meetingRequest)
     {
         //Validerer mødeforespørgslen
-        if (meetingRequest.Description == ""
+        if (meetingRequest.Description == "" // TODO: Måske vi skal anvende IsNullOrWhiteSpace alligevel, da den sikre at man ikke bare skriver et mellemrum eks??
             || meetingRequest.Consent == false)
         {
             return BadRequest("You must enter a description and give consent");
@@ -59,6 +59,7 @@ public class MeetingRequestController : ControllerBase
             return BadRequest("Customer information is required");
         }
 
+        // TODO: Valider formatet på kundens e-mailadresse og telefonnummer.
         //Validerer kundens oplysninger
         if (meetingRequest.Customer.Name == ""
             || meetingRequest.Customer.Email == ""
@@ -76,8 +77,7 @@ public class MeetingRequestController : ControllerBase
         meetingRequest.Status = "Pending";
 
         //Henter det valgte tidspunkt
-        TimeSlot? timeSlot = TimeSlotRepository
-            .GetTimeSlotById(meetingRequest.TimeSlot_Id);
+        TimeSlot? timeSlot = timeSlotRepository.GetTimeSlotById(meetingRequest.TimeSlot_Id);
 
         //Kontrollerer, at tidspunktet eksisterer
         if (timeSlot == null)
@@ -85,14 +85,8 @@ public class MeetingRequestController : ControllerBase
             return NotFound("The time slot does not exist");
         }
 
-        //Kontrollerer, at tidspunktet er ledigt
-        if (timeSlot.Status != "Available")
-        {
-            return Conflict("The time slot is not available");
-        }
-
         //Reserverer tidspunktet gennem repositoryet
-        bool reserved = TimeSlotRepository.ReserveTimeSlot(meetingRequest.TimeSlot_Id, "Reserved");
+        bool reserved = timeSlotRepository.ReserveTimeSlot(meetingRequest.TimeSlot_Id);
 
         if (reserved == false)
         {
@@ -103,8 +97,7 @@ public class MeetingRequestController : ControllerBase
         meetingRequest.SalesPerson_Id = timeSlot.SalesPerson_Id;
 
         //Gemmer forespørgslen
-        MeetingRequest createdRequest =
-            meetingRequestRepository.Add(meetingRequest);
+        MeetingRequest createdRequest = meetingRequestRepository.Add(meetingRequest);
 
         //Returnerer den oprettede forespørgsel
         return Ok(createdRequest);

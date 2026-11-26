@@ -6,9 +6,9 @@ namespace Backend.Repositories;
 
 public class PostalCodeRepositoryMongoDB : IPostalCodeRepository
 {
-    //Forbindelsen til samlingen "MeetingRequest" i mongoDB
+    //Forbindelsen til samlingen "PostalCodeAreas" i mongoDB
     private readonly IMongoCollection<PostalCodeArea> postalCodeCollection;
-     
+
     /*----Forbindelse til MongoDB----*/
     //Constructoren køres når repositoriet bliver oprettet
     public PostalCodeRepositoryMongoDB(IConfiguration configuration)
@@ -34,7 +34,8 @@ public class PostalCodeRepositoryMongoDB : IPostalCodeRepository
         // Vælger collection
         postalCodeCollection = database.GetCollection<PostalCodeArea>("PostalCodeAreas");
     }
-    
+
+    /*
     // Henter alle postnumre
     public List<PostalCodeArea> GetAllPostalCodes()
     {
@@ -43,19 +44,15 @@ public class PostalCodeRepositoryMongoDB : IPostalCodeRepository
 
 
         return postalCodeCollection.Find(filter).ToList();
-
-
     }
+    */ // Bruger vi den rent faktisk??
 
+   
     //Henter et specifikt postnummer
-   public PostalCodeArea? GetByPostalCode(string PostalCode)
+    public PostalCodeArea? GetByPostalCode(string postalCode)
     {
-        
-        // Finder annoncen, hvor _id svarer til Annonce_Id
-        FilterDefinition<PostalCodeArea> filter =
-            Builders<PostalCodeArea>.Filter.Eq("PostalCode", PostalCode);
-
-        // Returnerer annoncen eller null, hvis den ikke findes
-        return postalCodeCollection.Find(filter).FirstOrDefault();
+        // Returnerer postnummerområdet eller null, hvis det ikke findes
+        return postalCodeCollection.Find(p => p.PostalCode == postalCode).FirstOrDefault();
     }
-    }
+    // TODO: Opret et unikt indeks på PostalCode i MongoDB, så samme postnummer ikke kan tilknyttes flere sælgere.
+}
