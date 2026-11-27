@@ -15,12 +15,6 @@ public class PostalCodeRepositoryMemory : IPostalCodeRepository
         postalCodeAreas = JsonSerializer.Deserialize<List<PostalCodeArea>>(json) ?? new List<PostalCodeArea>();
     }
     
-    // Henter alle postnumre
-    public List<PostalCodeArea> GetAllPostalCodes()
-    {
-        return postalCodeAreas;
-    }
-
     //Henter et specifikt postnummer
    public PostalCodeArea? GetByPostalCode(string postalCode)
     {

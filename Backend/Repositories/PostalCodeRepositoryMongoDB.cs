@@ -35,18 +35,6 @@ public class PostalCodeRepositoryMongoDB : IPostalCodeRepository
         postalCodeCollection = database.GetCollection<PostalCodeArea>("PostalCodeAreas");
     }
 
-    /*
-    // Henter alle postnumre
-    public List<PostalCodeArea> GetAllPostalCodes()
-    {
-        // Et tomt filter betyder, at alle postalCodes skal hentes
-        FilterDefinition<PostalCodeArea> filter = Builders<PostalCodeArea>.Filter.Empty;
-
-
-        return postalCodeCollection.Find(filter).ToList();
-    }
-    */ // Bruger vi den rent faktisk??
-
    
     //Henter et specifikt postnummer
     public PostalCodeArea? GetByPostalCode(string postalCode)
