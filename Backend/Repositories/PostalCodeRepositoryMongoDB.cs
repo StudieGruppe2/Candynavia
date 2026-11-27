@@ -41,6 +41,4 @@ public class PostalCodeRepositoryMongoDB : IPostalCodeRepository
     {
         // Returnerer postnummerområdet eller null, hvis det ikke findes
         return postalCodeCollection.Find(p => p.PostalCode == postalCode).FirstOrDefault();
-    }
-    // TODO: Opret et unikt indeks på PostalCode i MongoDB, så samme postnummer ikke kan tilknyttes flere sælgere.
-}
+    } }
