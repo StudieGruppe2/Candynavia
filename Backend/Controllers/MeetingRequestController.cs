@@ -26,7 +26,7 @@ public class MeetingRequestController : ControllerBase
 
     /*----Hent mødeforespørgelser----*/
     [HttpGet]
-    public ActionResult<MeetingRequest> GetRequestById(int meetingRequest_Id)
+    public ActionResult<MeetingRequest> GetRequestById(string meetingRequest_Id)
     {
         //Leder efter forespørgslen i repository
         MeetingRequest? meetingRequest = meetingRequestRepository.GetById(meetingRequest_Id);
@@ -47,7 +47,8 @@ public class MeetingRequestController : ControllerBase
     public ActionResult<MeetingRequest> CreateRequest(MeetingRequest meetingRequest)
     {
         //Validerer mødeforespørgslen
-        if (meetingRequest.Description == "" // TODO: Måske vi skal anvende IsNullOrWhiteSpace alligevel, da den sikre at man ikke bare skriver et mellemrum eks??
+        // Validerer mødeforespørgslen
+        if (string.IsNullOrWhiteSpace(meetingRequest.Description) //IsNullOrWhiteSpace bruges til at tjekke om der blot er skrevet et mellemrum
             || meetingRequest.Consent == false)
         {
             return BadRequest("You must enter a description and give consent");
@@ -58,16 +59,22 @@ public class MeetingRequestController : ControllerBase
         {
             return BadRequest("Customer information is required");
         }
-
-        // TODO: Valider formatet på kundens e-mailadresse og telefonnummer.
-        //Validerer kundens oplysninger
-        if (meetingRequest.Customer.Name == ""
-            || meetingRequest.Customer.Email == ""
-            || meetingRequest.Customer.Phone == ""
-            || meetingRequest.Customer.Company == ""
-            || meetingRequest.Customer.Position == "")
+        
+        // Validerer kundens oplysninger
+        if (string.IsNullOrWhiteSpace(meetingRequest.Customer.Name)//IsNullOrWhiteSpace bruges til at tjekke om der blot er skrevet et mellemrum
+            || string.IsNullOrWhiteSpace(meetingRequest.Customer.Email)
+            || string.IsNullOrWhiteSpace(meetingRequest.Customer.Phone)
+            || string.IsNullOrWhiteSpace(meetingRequest.Customer.Company)
+            || string.IsNullOrWhiteSpace(meetingRequest.Customer.Position))
         {
             return BadRequest("All customer information must be provided");
+        }
+        
+        //Validerer formatet på kundens email
+        if (!meetingRequest.Customer.Email.Contains("@") //skal indeholde @
+            || !meetingRequest.Customer.Email.Contains(".")) //Skal indeholde .
+        {
+            return BadRequest("Invalid email address");
         }
 
         //Backenden sætter oprettelsestidspunktet

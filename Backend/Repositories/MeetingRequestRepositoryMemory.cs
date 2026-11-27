@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Core;
+using MongoDB.Bson;
 
 namespace Backend.Repositories;
 
@@ -20,7 +21,7 @@ public class MeetingRequestRepositoryMemory : IMeetingRequestRepository
 }
     
     /*----Hent request udfra id----*/
-   public  MeetingRequest? GetById(int meetingRequest_Id)
+   public  MeetingRequest? GetById(string meetingRequest_Id)
    {
        return meetingRequests.FirstOrDefault(m => m.MeetingRequest_Id == meetingRequest_Id);
    }
@@ -31,18 +32,9 @@ public class MeetingRequestRepositoryMemory : IMeetingRequestRepository
        //Sikrer, at kun en ad gangen udfører denne kode
        lock (lockObject)
        {
-           //Finder mødeforespørgslen med det højeste Id
-           MeetingRequest? lastRequest = meetingRequests.OrderByDescending(m => m.MeetingRequest_Id).FirstOrDefault();
+           //Genererer et unikt ObjectId
+           meetingRequest.MeetingRequest_Id = ObjectId.GenerateNewId().ToString();//Genererer et nyt, unikt ObjectId og konverterer det til en string
 
-           //Hvis listen er tom, starter Id på 1
-           if (lastRequest == null)
-           {
-               meetingRequest.MeetingRequest_Id = 1;
-           }
-           else
-           {
-               meetingRequest.MeetingRequest_Id = lastRequest.MeetingRequest_Id + 1;
-           }
 
            //Tilføjer forespørgslen til listen
            meetingRequests.Add(meetingRequest);

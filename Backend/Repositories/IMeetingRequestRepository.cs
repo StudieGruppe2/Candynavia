@@ -6,7 +6,7 @@ namespace Backend.Repositories;
 public interface IMeetingRequestRepository
 {
     //Henter en request udfra dens id og returnerer null, hvis forespørgslen ikke findes
-    MeetingRequest? GetById(int meetingRequest_Id);
+    MeetingRequest? GetById(string meetingRequest_Id);
     
     // Gemmer og returnerer den oprettede mødeforespørgsel
     MeetingRequest Add(MeetingRequest meetingRequest);
