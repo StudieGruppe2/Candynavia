@@ -18,5 +18,5 @@ public class TimeSlot
     public string Status { get; set; } = "";
 
     //Reference til den sælger, som tidspunktet tilhører
-    public int SalesPerson_Id { get; set; }
+    public int? SalesPerson_Id { get; set; }
 }
