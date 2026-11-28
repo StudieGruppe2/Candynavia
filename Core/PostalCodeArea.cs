@@ -7,6 +7,5 @@ public class PostalCodeArea
     public string PostalCode { get; set; } = ""; //Postnummeret gemmes som string, da det ikke anvendes til beregninger
     
     public string CityName { get; set; } = ""; //KONTROLLERE OM DENNE BRUGES NÅR VI ER HELT FÆRDIGE??
-    public int SalesPerson_Id { get; set; } //Reference til den sælger, der er ansvarlig for postnummerområdet
-    
+    public int? SalesPerson_Id { get; set; } //Nullable reference da et postnummerområde midlertidigt kan være uden en ansvarlig sælger
 }
