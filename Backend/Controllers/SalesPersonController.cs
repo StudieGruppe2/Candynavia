@@ -28,29 +28,30 @@ public class SalesPersonController : ControllerBase
         //Kontrollerer, at postnummeret består af fire tegn
         if (postalCode.Length != 4)
         {
-            return BadRequest(); //postnummer skal være 4 cifre
+            return BadRequest();
         }
 
         //Finder postnummerområdet ud fra kundens postnummer
         PostalCodeArea? postalCodeArea =
             postalCodeRepository.GetByPostalCode(postalCode);
 
-        //Returnerer 404, hvis postnummerområdet ikke findes
-        if (postalCodeArea == null)
+        //Kontrollerer, at postnummerområdet findes og har en tilknyttet sælger
+        if (postalCodeArea == null || postalCodeArea.SalesPerson_Id == null)
         {
-            return NotFound();//postkoden findes ikke i systemet
+            return NotFound();
         }
 
-        //Finder den sælger, der er tilknyttet postnummerområdet
-        SalesPerson? salesPerson = salesPersonRepository.GetSalesPersonById(postalCodeArea.SalesPerson_Id);
+        //Finder den tilknyttede sælger - .Value tilgår heltalsværdien i den nullable property
+        SalesPerson? salesPerson = 
+            salesPersonRepository.GetSalesPersonById(postalCodeArea.SalesPerson_Id.Value);
 
         //Kontrollerer, at den tilknyttede sælger eksisterer
         if (salesPerson == null)
         {
-            return NotFound();//der er ingen sælger til postnummeret
+            return NotFound();
         }
 
-        // Returnerer den fundne sælger til frontend
+        //Returnerer den fundne sælger til frontend
         return salesPerson;
     }
 }
