@@ -26,10 +26,10 @@ public class MeetingRequestController : ControllerBase //Klassen nedarver funkti
 
     /*Hent mødeforespørgelser*/
     [HttpGet]
-    public ActionResult<MeetingRequest> GetRequestById(string meetingRequest_Id)
+    public ActionResult<MeetingRequest> GetRequestById(string meetingRequestId)
     {
         //Leder efter forespørgslen i repository
-        MeetingRequest? meetingRequest = meetingRequestRepository.GetById(meetingRequest_Id);
+        MeetingRequest? meetingRequest = meetingRequestRepository.GetById(meetingRequestId);
 
         //Hvis forespørgslen ikke findes, returneres 404 Not Found
         if (meetingRequest == null)
