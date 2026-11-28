@@ -1,16 +1,16 @@
 /*----Container----*/
 .contact-container {
-    font-family: Arial, sans-serif;
+    font-family: Arial;
 }
 
 
 /*----Overskrifter og tekst----*/
 h1 {
-    font-family: Georgia, serif;
+    font-family: Georgia;
     font-size: 48px;
-    font-weight: 700;
+    font-weight: 700; /*skrift tykkelse*/
     color: #261B1B;
-    margin: 0 0 12px;
+    margin: 0 0 12px; /*selve margnen for afstnanden til skriftens kant*/
 }
 
 h2 {
@@ -28,11 +28,11 @@ h3 {
 
 p {
     font-size: 16px;
-    line-height: 1.6;
+    line-height: 1.6; /*gør så der kommer mere luft mellem tekstlinjerne, så bliver det nemmere at læse*/
     color: #625959;
 }
 
-/*Lille rosa overskrift */
+/*Lille rosa overskrift*/
 .overline {
     font-size: 14px;
     font-weight: 600;
@@ -58,7 +58,7 @@ p {
     padding: 24px;
     box-shadow: 0 5px 15px rgba(66, 30, 35, 0.06);
     min-width: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /*bestememr hovrdan bredden og højden på boxen beregnes, med den her er både border og padding med i bredden*/
 }
 
 /* Danmarkskortets boks fylder mest*/

@@ -1,4 +1,6 @@
 namespace Core;
+//Klassen repræsenterer data om mødeforespørgslen. Den har ikke selv ansvar for at godkende, afvise eller reservere et tidspunkt
+//En del af mødeforespørgslen er også kundens info, dette er embedded.
 
 public class MeetingRequest
 {

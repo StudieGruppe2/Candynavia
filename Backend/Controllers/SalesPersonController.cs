@@ -28,7 +28,7 @@ public class SalesPersonController : ControllerBase
         //Kontrollerer, at postnummeret består af fire tegn
         if (postalCode.Length != 4)
         {
-            return BadRequest("The postal code must contain four digits");
+            return BadRequest(); //postnummer skal være 4 cifre
         }
 
         //Finder postnummerområdet ud fra kundens postnummer
@@ -38,7 +38,7 @@ public class SalesPersonController : ControllerBase
         //Returnerer 404, hvis postnummerområdet ikke findes
         if (postalCodeArea == null)
         {
-            return NotFound("The postal code does not exist");
+            return NotFound();//postkoden findes ikke i systemet
         }
 
         //Finder den sælger, der er tilknyttet postnummerområdet
@@ -47,7 +47,7 @@ public class SalesPersonController : ControllerBase
         //Kontrollerer, at den tilknyttede sælger eksisterer
         if (salesPerson == null)
         {
-            return NotFound("No sales person found for this postal code");
+            return NotFound();//der er ingen sælger til postnummeret
         }
 
         // Returnerer den fundne sælger til frontend

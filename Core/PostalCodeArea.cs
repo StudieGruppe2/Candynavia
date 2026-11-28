@@ -1,5 +1,6 @@
 namespace Core;
 
+//Klassen repræsenterer et postnummerområde og dets tilknytning til den geografisk ansvarlige sælger
 public class PostalCodeArea
 { 
     public int PostalCodeArea_Id { get; set; } = Random.Shared.Next(); //den her kunne blive relevant når administrators funktioner skal laves ift fordeling af salgsområder??? 

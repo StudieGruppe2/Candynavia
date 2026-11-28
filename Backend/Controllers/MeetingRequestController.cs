@@ -1,13 +1,13 @@
-using Backend.Repositories;
-using Core;
-using Microsoft.AspNetCore.Mvc;
+using Backend.Repositories; //Giver adgang til repository-interfaces
+using Core; //Giver adgang til de fælles modelklasser
+using Microsoft.AspNetCore.Mvc; //Giver adgang til controllerklasser, attributter og HTTP-resultater.
 
 namespace Backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[controller]")] //Anvender controllerens navn uden endelsen "controller" som route - så routen bliver "MeetingRequest"
 
-public class MeetingRequestController : ControllerBase
+public class MeetingRequestController : ControllerBase //Klassen nedarver funktionalitet fra ControllerBase
 {
     //Controlleren bruger interfacet i stedet for et bestemt repository
     //Det kaldes Dependency Inversion og gør det muligt at skifte mellem Memory og MongoDB
@@ -24,7 +24,7 @@ public class MeetingRequestController : ControllerBase
     }
 
 
-    /*----Hent mødeforespørgelser----*/
+    /*Hent mødeforespørgelser*/
     [HttpGet]
     public ActionResult<MeetingRequest> GetRequestById(string meetingRequest_Id)
     {
@@ -42,12 +42,12 @@ public class MeetingRequestController : ControllerBase
     }
 
 
-    /*----Lav ny mødeforespørgsel----*/
+    /*Lav ny mødeforespørgsel*/
+    //den der rammes når brugeren trykker på send mødeforspørgsel
     [HttpPost]
     public ActionResult<MeetingRequest> CreateRequest(MeetingRequest meetingRequest)
     {
         //Validerer mødeforespørgslen
-        // Validerer mødeforespørgslen
         if (string.IsNullOrWhiteSpace(meetingRequest.Description) //IsNullOrWhiteSpace bruges til at tjekke om der blot er skrevet et mellemrum
             || meetingRequest.Consent == false)
         {
@@ -74,7 +74,7 @@ public class MeetingRequestController : ControllerBase
         if (!meetingRequest.Customer.Email.Contains("@") //skal indeholde @
             || !meetingRequest.Customer.Email.Contains(".")) //Skal indeholde .
         {
-            return BadRequest("Invalid email address");
+            return BadRequest(); //email er ikke korrekt skrevet
         }
 
         //Backenden sætter oprettelsestidspunktet
@@ -89,7 +89,7 @@ public class MeetingRequestController : ControllerBase
         //Kontrollerer, at tidspunktet eksisterer
         if (timeSlot == null)
         {
-            return NotFound("The time slot does not exist");
+            return NotFound(); //timeslot findes ikkde
         }
 
         //Reserverer tidspunktet gennem repositoryet
@@ -97,7 +97,7 @@ public class MeetingRequestController : ControllerBase
 
         if (reserved == false)
         {
-            return Conflict("The time slot could not be reserved");
+            return Conflict(); //tidspunktet kan ikke reserveres
         }
 
         //Sælgeren følger det valgte tidspunkt

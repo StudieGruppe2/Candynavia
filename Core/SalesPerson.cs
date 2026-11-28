@@ -1,8 +1,9 @@
 namespace Core;
 
+//Klassen repræsenterer en sælger i systemet og de oplysninger, der bruges til at identificere og kontakte
 public class SalesPerson
 {
-    public int SalesPerson_Id {get; set;} // Unikt ID, der identificerer sælgeren i databasen - skal ikke oprettes med random da det er en stamdata
+    public int SalesPerson_Id {get; set;} 
 
     public string Name {get; set;} = "";
 

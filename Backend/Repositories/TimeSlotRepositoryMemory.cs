@@ -5,9 +5,9 @@ namespace Backend.Repositories;
 public class TimeSlotRepositoryMemory : ITimeSlotRepository
 {
     //Gemmer mødetidspunkterne i hukommelsen i stedet for en database
-    private readonly List<TimeSlot> timeSlots = new List<TimeSlot>();
+    private readonly List<TimeSlot> timeSlots;
     
-    //Forhindrer konflikter ved samtidige reservationer
+    //låseobjekt som forhindrer konflikter ved samtidige reservationer
     private readonly object reservationLock = new object();
 
     public TimeSlotRepositoryMemory()
@@ -18,9 +18,9 @@ public class TimeSlotRepositoryMemory : ITimeSlotRepository
     }
 
    /*----henter et specifikt mødetidspunkt ud fra dets id----*/
-    public TimeSlot? GetTimeSlotById(int TimeSlot_Id)
+    public TimeSlot? GetTimeSlotById(int TimeSlotId)
     {
-        return timeSlots.FirstOrDefault(t => t.TimeSlot_Id == TimeSlot_Id);
+        return timeSlots.FirstOrDefault(t => t.TimeSlot_Id == TimeSlotId);
     }
 
     /*----Henter en sælgers ledige og fremtidige mødetidspunkter----*/

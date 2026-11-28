@@ -8,7 +8,7 @@ public class TimeSlotRepositoryMongoDB : ITimeSlotRepository
     //Forbindelsen til samlingen "TimeSlots" i mongoDB
     private readonly IMongoCollection<TimeSlot> timeSlotCollection;
 
-    /*----Forbindelse til MongoDB----*/
+    /*Forbindelse til MongoDB*/
     //Constructoren køres når repositoriet bliver oprettet
     public TimeSlotRepositoryMongoDB(IConfiguration configuration)
     {
@@ -17,7 +17,7 @@ public class TimeSlotRepositoryMongoDB : ITimeSlotRepository
         {
             BsonClassMap<TimeSlot> map = new BsonClassMap<TimeSlot>();
             map.AutoMap();
-            map.MapIdMember(typeof(TimeSlot).GetProperty("TimeSlot_Id")!);
+            map.MapIdMember(t => t.TimeSlot_Id);            
             BsonClassMap.RegisterClassMap(map);
         }
 
@@ -30,14 +30,14 @@ public class TimeSlotRepositoryMongoDB : ITimeSlotRepository
     }
     
   
-    /*----Henter et specifikt mødetidspunkt udfra dets id----*/
-    public TimeSlot? GetTimeSlotById(int timeSlot_Id)
+    /*Henter et specifikt mødetidspunkt udfra dets id*/
+    public TimeSlot? GetTimeSlotById(int timeSlotId)
     {
-        return timeSlotCollection.Find(t => t.TimeSlot_Id == timeSlot_Id).FirstOrDefault();
+        return timeSlotCollection.Find(t => t.TimeSlot_Id == timeSlotId).FirstOrDefault();
     }
 
    
-    /*----Henter en sælgers ledige og fremtidige mødetidspunkter----*/
+    /*Henter en sælgers ledige og fremtidige mødetidspunkter*/
     public List<TimeSlot> GetAvailableTimeSlots(int salesPerson_Id)
     {
             return timeSlotCollection.Find(t =>
@@ -46,12 +46,11 @@ public class TimeSlotRepositoryMongoDB : ITimeSlotRepository
                 t.StartTime > DateTime.UtcNow).ToList();
     } 
 
-    /*----Reserverer et mødetidspunkt, hvis det stadig er ledigt----*/
+    /*Reserverer et mødetidspunkt, hvis det stadig er ledigt*/
     public bool ReserveTimeSlot(int timeSlotId)
     {
         //Finder tidspunktet, hvis alle tre betingelser er opfyldt: tid i fremtiden, tidspunkt tilhøre valgt sælger og har status available
-        FilterDefinition<TimeSlot> filter =
-            Builders<TimeSlot>.Filter.And(
+        FilterDefinition<TimeSlot> filter = Builders<TimeSlot>.Filter.And(
                 Builders<TimeSlot>.Filter.Eq(t => t.TimeSlot_Id, timeSlotId),
                 Builders<TimeSlot>.Filter.Eq(t => t.Status, "Available"),
                 Builders<TimeSlot>.Filter.Gt(t => t.StartTime, DateTime.UtcNow)
@@ -64,7 +63,7 @@ public class TimeSlotRepositoryMongoDB : ITimeSlotRepository
         UpdateResult result = timeSlotCollection.UpdateOne(filter, update);
 
         //ModifiedCount angiver antallet af ændrede dokumenter i MongoDB.
-        //Hvis tidspunktet allerede er reserveret, opfyldes filteret ikke, og ModifiedCount bliver 0. Dette forhindrer dobbeltbooking af samme TimeSlot.
+        //Hvis tidspunktet allerede er reserveret, opfyldes filteret ikke og ModifiedCount bliver 0. så forhindres dobbeltbooking af samme TimeSlot
         return result.ModifiedCount == 1; 
                                           
     }

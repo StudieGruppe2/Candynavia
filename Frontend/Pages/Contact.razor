@@ -1,7 +1,10 @@
-@page "/"
-@inject HttpClient Http
+<!--Razor direktiv, som angiver sidens route-->
+@page "/" 
 
-<div class="contact-container">
+<!--Razor direktiv, som giver komponenten adgang til en HttpClient, så den kan kommunikere med backend via http protokol-->
+@inject HttpClient Http 
+
+<div class="contact-container"><!--HTML-elementet som er rammen om siden, og bruges til gruppere vores andre elementer-->
 
     <p class="overline">KONTAKT OS</p>
 
@@ -11,37 +14,38 @@
         Find den ansvarlige sælger i dit område, se kontaktoplysninger og anmod om et møde på et tidspunkt, der passer dig.
     </p>
 
-    <!--Fælles container til Danmarkskort og søgning-->
+    <!--Fælles container til DK kort og søgning-->
     <div class="sales-container">
         <!--Danmarkskort med salgsområderne og sælgere-->
-        <div class="map-container">
+        <div class="map-container"> <!--selve kassen som billedet ligger i-->
             <img src="Pictures/CandynaviaDKKort.png"
                  alt="Danmarkskort over Candynavias salgsområder"
-                 class="sales-map" />
+                 class="sales-map"/> <!--stylingen til billedets placering og størrelse-->
         </div>
 
         <!--Boks til søgning efter sælger-->
         <div class="Search-container">
             <h2>Find din lokale sælger</h2>
             <p>
-                Indtast dit postnummer, så finder vi den rette
-                kontaktperson til dig.
+                Indtast dit postnummer, så finder vi den rette kontaktperson til dig.
             </p>
-            <div class="Searchline">
+            
+            <div class="Searchline"> <!--kassen til vores søgefelt-->
                 <input type="text"
-                       placeholder="Indtast postnummer"
-                       maxlength="4"
+                       placeholder="Indtast postnummer" 
+                       maxlength="4" 
                        @bind-value="postalCode" />
-                <div>
+                <div> <!--maxlength, siger der kun kan indtastes 4 tegn-->
+                    
                     <button class="btn-primary"
-                            @onclick="() => SeeSalesPersonByPostalCode(postalCode)">
+                            @onclick="() => SeeSalesPersonByPostalCode(postalCode)"> <!--lambda'en kalder metoden når brugeren klikker og postalCode sendes med som argument-->
                         Find din sælger
                     </button>
                 </div>
             </div>
 
-            <!--Fejlbesked, hvis der ikke findes en sælger-->
-            @if (errorMessage != null)
+            <!--fejlbesked, hvis der ikke findes en sælger-->
+            @if (errorMessage != null) //null fordi der ikke referes til en værdi eller objekt
             {
                 <p class="message-error">@errorMessage</p>
             }
@@ -49,13 +53,13 @@
             <!--Den fundne sælger vises under søgningen-->
             @if (salesPerson != null)
             {
-                <div class="salesperson-result">
+                <div class="salesperson-result"> 
                     <p class="overline">DIN SÆLGER</p>
                     <h3>@salesPerson.Name</h3>
                     <p>@salesPerson.Position</p>
-                    <p>@salesPerson.Email<br />@salesPerson.Phone</p>
+                    <p>@salesPerson.Email<br />
 
-                    <button class="btn-primary" @onclick="() => selectedSalesPerson = salesPerson">
+                    <button class="btn-primary" @onclick="() => selectedSalesPerson = salesPerson"> <!--lambda'en tildeler variablen selectedsalesperson et salesperson objekt-->
                         Anmod om et møde
                     </button>
                 </div>
@@ -64,30 +68,33 @@
     </div>
 </div>
 
-<!--Viser bookingvinduet og sender den valgte sælger til komponenten. Når vinduet lukkes, kaldes OnClose, som sætter selectedSalesPerson til null, så bookingvinduet ikke længere vises-->
+<!--blazor komponent som viser forespørgsels-vinduet og sender den valgte sælger til komponenten. Når vinduet lukkes kaldes OnClose som sætter selectedSalesPerson til null, så bookingvinduet ikke længere vises-->
 <!-- Opretter først bookingvinduet, når en sælger er valgt -->
 @if (selectedSalesPerson != null)
-{
-<RequestWindow SalesPerson="selectedSalesPerson"OnClose="() => selectedSalesPerson = null" />
-}
+    {
+      <RequestWindow SalesPerson="selectedSalesPerson"OnClose="() => selectedSalesPerson = null" /> //requestWindow referere til det vindue, det sender den valgte sælger til vores Salesperson parameter
+      <!--contact sender onClose som parameter til RW, så når brugeren trykker på krydset i RW aktiveres OnClose metoden og contact siden modtager dette og sætter selectedSP til null-->
+    }
 
 @code {
+    //Variabler - de definere vores komponents tilstand
     private string postalCode = ""; //Gemmer postnummeret fra søgefeltet
-    private SalesPerson? salesPerson; //Den fundne sælger
-    private SalesPerson? selectedSalesPerson; //Den sælger, kunden ønsker at booke hos
+    private SalesPerson? salesPerson; //Den fundne sælger, man kan også sige at det er resultatet af søgningen
+    private SalesPerson? selectedSalesPerson; //sælgeren som er valgt. Den går først værdi når man trykker "anmod om møde"
     private string? errorMessage; //Fejlbesked til brugeren
 
-    // Finder sælgeren ud fra det indtastede postnummer
+    //Finder sælgeren ud fra det indtastede postnummer
     private async Task SeeSalesPersonByPostalCode(string postalCode)
     {
-        errorMessage = null;
+        //for hver ny søgning nulstilles de
+        errorMessage = null; 
         salesPerson = null;
 
         //Sender en HTTP GET-request til backend
-        HttpResponseMessage response = await Http.GetAsync($"SalesPerson/postalcode/{postalCode}");
+        HttpResponseMessage response = await Http.GetAsync($"SalesPerson/postalcode/{postalCode}"); //Http er den HttpClient vi får adgang til fra dependency injection øverst på siden, med vores inject
 
         //Kontrollerer, om backend har fundet en sælger
-        if (response.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode) //IsSuccessStatusCode er en property til vores bool på vores HttpResponseMessage
         {
             //Omdanner JSON-svaret til et SalesPerson-objekt, så vi kan tilgå sælgerens oplysninger
             salesPerson = await response.Content.ReadFromJsonAsync<SalesPerson>();

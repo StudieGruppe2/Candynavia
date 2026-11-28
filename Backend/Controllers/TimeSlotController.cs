@@ -19,18 +19,7 @@ public class TimeSlotController : ControllerBase
         this.timeSlotRepository = timeSlotRepository;
     }
 
-    /*
-    // ---------- HENT Time slot ----------
-    // GET /TimeSlot - Henter alle time slots
-    [HttpGet]
-    public List<TimeSlot> GetAll()
-    {
-        return timeSlotRepository.GetAll();
-    }
-    */
-
-    // ---------- HENT LEDIGE TIME SLOTS FOR EN SÆLGER ----------
-    // GET /TimeSlot/salesperson/{SalesPerson_Id}
+    /*Hent ledige timeslots udfra sælger_id*/
     [HttpGet("salesperson/{SalesPerson_Id}")]
     public ActionResult<List<TimeSlot>> GetAvailableTimeSlotsBySalesPerson(int salesPerson_Id)
     {

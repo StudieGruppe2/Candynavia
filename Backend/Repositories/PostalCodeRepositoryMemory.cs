@@ -6,7 +6,7 @@ namespace Backend.Repositories;
 public class PostalCodeRepositoryMemory : IPostalCodeRepository
 {
     // Listen gemmer Postnumrerne i hukommelsen i stedet for en database
-    private List<PostalCodeArea> postalCodeAreas = new List<PostalCodeArea>();
+    private List<PostalCodeArea> postalCodeAreas;
 
     public PostalCodeRepositoryMemory()
     {
@@ -16,7 +16,7 @@ public class PostalCodeRepositoryMemory : IPostalCodeRepository
     }
     
     //Henter et specifikt postnummer
-   public PostalCodeArea? GetByPostalCode(string postalCode)
+    public PostalCodeArea? GetByPostalCode(string postalCode)
     {
         return postalCodeAreas.FirstOrDefault(p => p.PostalCode == postalCode);
     }

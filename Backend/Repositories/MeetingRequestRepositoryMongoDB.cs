@@ -12,7 +12,7 @@ public class MeetingRequestRepositoryMongoDB : IMeetingRequestRepository
     // Forbindelsen til samlingen "MeetingRequests" i MongoDB
     private readonly IMongoCollection<MeetingRequest> meetingRequestCollection;
 
-    /*----Forbindelse til MongoDB----*/
+    /*Forbindelse til MongoDB*/
     public MeetingRequestRepositoryMongoDB(IConfiguration configuration)
     {
         // Konfigurerer MeetingRequest_Id som automatisk genereret ObjectId
@@ -36,15 +36,18 @@ public class MeetingRequestRepositoryMongoDB : IMeetingRequestRepository
         meetingRequestCollection = database.GetCollection<MeetingRequest>("MeetingRequests");
     }
 
-    /*----Hent request ud fra ID----*/
+    /*Hent request ud fra ID*/
     public MeetingRequest? GetById(string meetingRequest_Id)
     {
         return meetingRequestCollection.Find(m => m.MeetingRequest_Id == meetingRequest_Id).FirstOrDefault();
     }
 
-    /*----Opret ny meetingRequest----*/
+    /*Opret ny meetingRequest*/
     public MeetingRequest Add(MeetingRequest meetingRequest)
     {
+        //nulstiller hvis der skulle blive sendt et id med fra frontend, så driveren står for at genererer et nyt ObjectId
+        meetingRequest.MeetingRequest_Id = null;
+        
         // Gemmer forespørgslen i MongoDB, hvor driveren automatisk genererer et ObjectId
         meetingRequestCollection.InsertOne(meetingRequest);
 

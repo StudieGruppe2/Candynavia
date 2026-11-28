@@ -1,66 +1,72 @@
+@using System.Net <!--giver adgang til vores httpstatus koder-->
+@using System.Linq <!--giver adgang til vores linq metoder-->
+
+<!--Dependency Injection-->
 @inject HttpClient Http
 
+
+<!--bookingvinduet vises kun når en sælger er valgt-->
 @if (SalesPerson != null)
 {
-    <div class="modal-backdrop" @onclick="Close">
-        <div class="modal-box" @onclick:stopPropagation="true">
+    <div class="modal-backdrop">
+        <div class="modal-box">
 
-            <button class="modal-close" @onclick="Close">✕</button>
+            <!--Kunden skal aktivt lukke vinduet, så indtastede oplysninger ikke mistes ved eks. ved klik på baggrunden-->
+            <button class="modal-close" @onclick="Close">x</button>
 
+
+            <!--Sælgerens oplysninger-->
             <p class="overline">MØDEFORESPØRGSEL</p>
+
+            <!--Sælgerobjektet modtages gennem en parameter fra Contact-->
             <h2>@SalesPerson.Name</h2>
-            <p>@SalesPerson.Position · @SalesPerson.Email · @SalesPerson.Phone</p>
-
-            @if (isSent)
+            <p>@SalesPerson.Position · @SalesPerson.Email</p>
+            
+            <!--forespørgselsfunktionen vises indtil forespørgslen er sendt-->
+            @if (!isSent)
             {
-                <p class="message-success">
-                    Tak! Din mødeforespørgsel er modtaget. Du vil modtage en status på mail, når sælgeren har set din forespørgsel
-                </p>
-
-                <button class="btn-primary" @onclick="Close">Luk</button>
-            }
-            else
-            {
+                <!--visning af fejlbeskeder-->
                 @if (errorMessage != null)
                 {
                     <p class="message-error">@errorMessage</p>
                 }
 
-                @if (timeSlots == null)
+
+                <!--tjekker om sælgerens ledige tider er hentet-->
+                @if (timeSlots == null && errorMessage == null) //listen er ikke modtaget endnu fra Backend, og der er ingen fejl
                 {
-                    @if (errorMessage == null)
-                    {
-                        <p>Henter ledige tider...</p>
-                    }
+                    <p>Henter ledige tider...</p>
                 }
-                else if (timeSlots.Count == 0)
+                else if (timeSlots != null && timeSlots.Count == 0) //listen er modtaget men tom
                 {
-                    <p>Sælgeren har ingen ledige tider lige nu.</p>
+                    <p>Sælgeren har ingen ledige tider lige nu.</p> 
                 }
-                else
+                else if (timeSlots != null)//Listen er modtaget og har timeslots
                 {
                     <div class="booking-container">
 
-                        <!--Ledige datoer-->
+
+                        <!--først: vælg en dato-->
                         <div class="calendar-container">
-
                             <h3>Vælg en dato</h3>
-
                             <div class="date-list">
+
+                                <!--Genererer en knap for hver dato med ledige tider-->
                                 @foreach (DateTime date in GetAvailableDates())
                                 {
-                                    <button class="@GetButtonClass(selectedDate == date)"disabled="@isSubmitting"@onclick="() => SelectDate(date)">
-
-                                        @date.ToString("dddd dd/MM/yyyy")
-
+                                    <!--Den valgte dato fremhæves med en dynamisk CSS-klasse. Lambdaudtrykket sender datoen til SelectDate ved klik-->
+                                    <button class="@GetButtonClass(selectedDate == date)"
+                                            disabled="@isSubmitting"
+                                            @onclick="() => SelectDate(date)"> <!--kaldes når en dato trykkes på, og sender datoen med som argument-->
+                                        @date.ToString("dddd dd/MM/yyyy") <!--bruges til at formatere alle datoerne i foreach løkken-->
                                     </button>
                                 }
                             </div>
                         </div>
 
-                        <!--ledige tidspunkter -->
-                        <div class="available-times">
 
+                        <!--andet: vælg et tidspunkt-->
+                        <div class="available-times">
                             <h3>Ledige tidspunkter</h3>
 
                             @if (selectedDate == null)
@@ -69,9 +75,13 @@
                             }
                             else
                             {
-                                @foreach (TimeSlot slot in GetTimeSlotsForDate(selectedDate.Value))
+                                <!--Viser kun tidspunkter på den valgte dato-->
+                                @foreach (TimeSlot slot in GetTimeSlotsForDate(selectedDate.Value)) // bruger value fordi det er en nullable værdi, og vores metode skal have en almindelig DateTime
                                 {
-                                    <button class="@GetButtonClass(selectedTimeSlot == slot)"disabled="@isSubmitting"@onclick="() => SelectTimeSlot(slot)">
+                                    <button class="@GetButtonClass(selectedTimeSlot == slot)"
+                                            disabled="@isSubmitting"
+                                            @onclick="() => SelectTimeSlot(slot)">
+
                                         @slot.StartTime.ToLocalTime().ToString("HH:mm")
                                         –
                                         @slot.EndTime.ToLocalTime().ToString("HH:mm")
@@ -83,11 +93,12 @@
                     </div>
                 }
 
-                <!--Kundeformular-->
-                @if (selectedTimeSlot != null)
+
+                <!--tredje: udfyld kundeformularen-->
+                @if (selectedTimeSlot != null) //viser først formualren når et tidspunkt er valgt
                 {
                     <h3>Dine oplysninger</h3>
-
+                    
                     <input placeholder="Navn" @bind="request.Customer.Name" />
                     <input placeholder="Email" @bind="request.Customer.Email" />
                     <input placeholder="Telefon" @bind="request.Customer.Phone" />
@@ -97,11 +108,15 @@
                     <textarea placeholder="Hvad vil du gerne tale om?"
                               @bind="request.Description"></textarea>
 
+                    <!--Registrerer kundens samtykke-->
                     <label class="consent">
                         <input type="checkbox" @bind="request.Consent" />
                         Jeg giver samtykke til, at mine oplysninger må bruges til at kontakte mig
                     </label>
 
+
+                    <!--fjerde: send mødeforespørgslen-->
+                    <!--Knappen deaktiveres under afsendelse for at undgå gentagne forespørgsler fra komponenten-->
                     <button class="btn-primary"
                             @onclick="Submit"
                             disabled="@isSubmitting">
@@ -109,36 +124,55 @@
                     </button>
                 }
             }
+
+
+            <!--femte: Vis bekræftelse efter vellykket afsendelse-->
+            else
+            {
+                <p class="message-success">
+                    Tak! Din mødeforespørgsel er modtaget.
+                    Du vil modtage en status på mail, når sælgeren
+                    har set din forespørgsel.
+                </p>
+
+                <button class="btn-primary" @onclick="Close">Luk</button>
+            }
         </div>
     </div>
 }
 
+
 @code {
 
-    /*----Parametre fra Contact----*/
+    /*Parametre fra Contact*/
+    // Modtager det valgte sælgerobjekt fra Contact.
     [Parameter] public SalesPerson? SalesPerson { get; set; }
+    // Callback til Contact, som håndterer lukning af bookingvinduet.
     [Parameter] public EventCallback OnClose { get; set; }
+    
+    /*Komponentens tilstand*/
+    private List<TimeSlot>? timeSlots;// Sælgerens ledige tidspunkter
+    private DateTime? selectedDate;// Kundens valgte dato
+    private TimeSlot? selectedTimeSlot;// Kundens valgte tidspunkt
 
-
-    /*----Variabler----*/
-    private List<TimeSlot>? timeSlots;
-    private DateTime? selectedDate;
-    private TimeSlot? selectedTimeSlot;
-
+    //laver et MeetingRequest-objekt til kundens oplysninger - på denne måde oprettes der automatisk et customer objekt når meetingrequest objektet oprettes
     private MeetingRequest request = new MeetingRequest();
 
-    private string? errorMessage;
-    private bool isSent;
-    private bool isSubmitting;
+    private string? errorMessage;// Fælles fejlbesked
+    private bool isSubmitting;// Angiver om afsendelse er i gang
+    private bool isSent;// Angiver om afsendelsen er lykkedes
 
 
-    /*----Hent ledige tider----*/
-    //Køres, når bookingvinduet oprettes
+    /*Initialisering af bookingvinduet*/
+    //Blazors lifecycle-metode, der kaldes, når komponenten initialiseres.
     protected override async Task OnInitializedAsync()
     {
         await LoadTimeSlots();
     }
 
+
+    /*Hent sælgerens ledige tider
+     Henter ledige tidspunkter fra backend ud fra sælgerens ID.*/
     private async Task LoadTimeSlots()
     {
         if (SalesPerson == null)
@@ -148,82 +182,85 @@
 
         timeSlots = null;
 
-        HttpResponseMessage response = await Http.GetAsync(
-            $"TimeSlot/salesperson/{SalesPerson.SalesPerson_Id}");
-
-        if (response.IsSuccessStatusCode)
+        try
         {
-            timeSlots = await response.Content.ReadFromJsonAsync<List<TimeSlot>>();
+            HttpResponseMessage response = await Http.GetAsync($"TimeSlot/salesperson/{SalesPerson.SalesPerson_Id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                //liste af TimeSlot-objekter
+                timeSlots = await response.Content.ReadFromJsonAsync<List<TimeSlot>>();
+
+                if (timeSlots == null)
+                {
+                    errorMessage = "De ledige tider kunne ikke hentes.";
+                }
+            }
+            else
+            {
+                errorMessage = "De ledige tider kunne ikke hentes.";
+            }
         }
-        else
+        catch (Exception)
         {
             errorMessage = "De ledige tider kunne ikke hentes.";
         }
     }
 
 
-    /*-----find ledige datoer----*/
+    /*første fase - Vis og vælg dato*/
+    //linq til at udtrække unikke datoer fra listen af ledige tidspunkter og sortere dem kronologisk.
     private List<DateTime> GetAvailableDates()
     {
-        List<DateTime> dates = new List<DateTime>();
-
-        if (timeSlots != null)
+        if (timeSlots == null)
         {
-            foreach (TimeSlot slot in timeSlots)
-            {
-                DateTime date = slot.StartTime.ToLocalTime().Date;
-
-                //Undgår at tilføje samme dato flere gange
-                if (!dates.Contains(date))
-                {
-                    dates.Add(date);
-                }
-            }
+            return new List<DateTime>();
         }
 
-        //Sorterer datoerne kronologisk
-        dates.Sort();
-
-        return dates;
+        //Select: Udtrækker datoerne i lokal tid
+        //Distinct: fjerner dubletter, fordi der kan være flere slots på en dato
+        //Order-By og ToList: sortere og opretter den færdige lsite som iteres over
+        return timeSlots.Select(slot => slot.StartTime.ToLocalTime().Date)
+            .Distinct()
+            .OrderBy(date => date).ToList();
     }
 
-
-    /*----Vælg dato og tidspunkt----*/
+    // Gemmer den valgte dato
     private void SelectDate(DateTime date)
     {
-        selectedDate = date;
-        selectedTimeSlot = null;
-        errorMessage = null;
+        selectedDate = date; //gemmer den dato kunden har valgt
+        selectedTimeSlot = null; //nulstiller det, hvis nu kunden tidligere har valgt et tudspunkt på en anden dato
+        errorMessage = null; //fjerner tidligere fejlbeskeder, da det er en ny handling nu
     }
 
-    // Finder alle ledige tider på den valgte dato
+
+    /*anden fase - Vis og vælg tidspunkt*/
+    // Filtrerer ledige tidspunkter efter den valgte dato og sorterer dem kronologisk efter starttidspunkt.
     private List<TimeSlot> GetTimeSlotsForDate(DateTime date)
     {
-        List<TimeSlot> dailyTimeSlots = new List<TimeSlot>();
-
-        if (timeSlots != null)
+        if (timeSlots == null)
         {
-            foreach (TimeSlot slot in timeSlots)
-            {
-                if (slot.StartTime.ToLocalTime().Date == date)
-                {
-                    dailyTimeSlots.Add(slot);
-                }
-            }
+            return new List<TimeSlot>(); //returnere en ny tom liste hvis timeslots er null
         }
 
-        return dailyTimeSlots;
+        return timeSlots //ellers returnere vi en liste udfra denne metode
+            .Where(slot => slot.StartTime.ToLocalTime().Date == date)
+            .OrderBy(slot => slot.StartTime)
+            .ToList();
     }
 
+    //Gemmer kundens valgte TimeSlot-objekt hvorefter kundeformularen vises.
     private void SelectTimeSlot(TimeSlot slot)
     {
         selectedTimeSlot = slot;
     }
 
-    //Fremhæver den valgte dato eller det valgte tidspunkt
+
+    /*Fælles styling af datoer og tidspunkter*/
+    //Returnerer CSS-klasser, så den valgte dato eller det valgte tidspunkt fremhæves.
     private string GetButtonClass(bool selected)
     {
-        if (selected == true)
+        if (selected)
         {
             return "time-slot selected";
         }
@@ -232,55 +269,69 @@
     }
 
 
-    /*----Send mødeforespørgsel----*/
+    /*fjerde og femte: send mødeforespørgsel og håndter svar*/
     private async Task Submit()
     {
+        // Forhindrer afsendelse uden et valgt tidspunkt eller mens en anden afsendelse er i gang
         if (selectedTimeSlot == null || isSubmitting)
         {
-            return;
+            return; //koden stopper her
         }
 
+       
         errorMessage = null;
         isSubmitting = true;
-
+        // Tilknytter mødeforespørgslen til det valgte tidspunkt gennem ID.
         request.TimeSlot_Id = selectedTimeSlot.TimeSlot_Id;
 
-        HttpResponseMessage response =
-            await Http.PostAsJsonAsync("MeetingRequest", request);
-
-        isSubmitting = false;
-
-        if (response.IsSuccessStatusCode)
+        try
         {
-            isSent = true;
+            // sender meetingRequest objektet til backend via en HTTP POST-request
+            HttpResponseMessage response = await Http.PostAsJsonAsync("MeetingRequest", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                //viser bekræftelsen i stedet for formularen
+                isSent = true;
+            }
+            else if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                // Nulstiller kundens valg og henter opdaterede tider, hvis tidspunktet ikke længere er ledigt.
+                errorMessage = "Tidspunktet er ikke længere ledigt.";
+
+                selectedDate = null;
+                selectedTimeSlot = null;
+
+                await LoadTimeSlots();
+            }
+            else if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                errorMessage = "Kontrollér dine oplysninger og dit samtykke."; //hvis vores controller ser at consent er false
+            }
+            else
+            {
+                errorMessage = "Forespørgslen kunne ikke sendes."; //hvis statuskoden er 500, så er ingen af betingeler udfyldt
+            }
         }
-        else if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+        catch (Exception)
         {
-            errorMessage = "Tidspunktet er ikke længere ledigt.";
-
-            selectedDate = null;
-            selectedTimeSlot = null;
-
-            //Henter de opdaterede ledige tider
-            await LoadTimeSlots();
+            errorMessage = "Der er opstået en fejl";
         }
-        else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+       
+        finally
         {
-            errorMessage = "Udfyld alle felter og giv samtykke.";
-        }
-        else
-        {
-            errorMessage = "Der opstod en fejl. Prøv igen senere.";
+            // Nulstilles uanset resultatet af afsendelsen, så komponenten ikke forbliver låst ved en fejl
+            isSubmitting = false;
         }
     }
 
 
-    /*----Luk bookingvinduet----*/
+    //Luk bookingvinduet
     private async Task Close()
     {
-        if (isSubmitting == false)
+        if (!isSubmitting)
         {
-            await OnClose.InvokeAsync();
+            await OnClose.InvokeAsync(); //aktivere eventcallbakcen modtaget fra contact siden
         }
     }
 }

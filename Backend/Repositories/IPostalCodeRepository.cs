@@ -6,7 +6,7 @@ namespace Backend.Repositories;
 public interface IPostalCodeRepository
 {
     
-    //Henter et specifikt postnummer og returnere null hvis postnummeret ikke findes
-   PostalCodeArea? GetByPostalCode(string postalCode);
+    //Henter et specifikt postnummer og returnere null hvis postnummeret ikke findes eller et objekt af postcodearea
+    PostalCodeArea? GetByPostalCode(string postalCode);
 
 }

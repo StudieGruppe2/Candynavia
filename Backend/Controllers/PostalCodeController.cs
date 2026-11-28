@@ -19,16 +19,7 @@ public class PostalCodeController : ControllerBase
         this.postalCodeRepository = postalCodeRepository;
     }
 
-    
-    /*----Hent alle postnumre----*/
-    /*[HttpGet]
-    public ActionResult<List<PostalCodeArea>> GetAll()
-    {
-        return postalCodeRepository.GetAllPostalCodes();
-    }
-    */  //HAR VI BRUG FOR DEN??
-
-    /*----Henter et specifikt postnummerområde----*/
+    /*Henter et specifikt postnummerområde*/
     [HttpGet("{postalCode}")]
     public ActionResult<PostalCodeArea> GetByPostalCode(string postalCode)
     {
